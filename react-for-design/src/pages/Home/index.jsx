@@ -16,25 +16,25 @@ import {
 // Mock data
 const popularServices = [
   {
-    icon: <Brush className="h-6 w-6" />,
+    icon: <Brush className="w-6 h-6" />,
     name: "Makeup",
     description: "Professional makeup services",
     price: "From $79",
   },
   {
-    icon: <Scissors className="h-6 w-6" />,
+    icon: <Scissors className="w-6 h-6" />,
     name: "Hair",
     description: "Styling & treatments",
     price: "From $49",
   },
   {
-    icon: <Palette className="h-6 w-6" />,
+    icon: <Palette className="w-6 h-6" />,
     name: "Nails",
     description: "Manicure & pedicure",
     price: "From $39",
   },
   {
-    icon: <Sparkles className="h-6 w-6" />,
+    icon: <Sparkles className="w-6 h-6" />,
     name: "Facial",
     description: "Skincare treatments",
     price: "From $89",
@@ -94,28 +94,28 @@ const LocationModal = ({ isOpen, onClose }) => {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -20, opacity: 0 }}
-        className="relative w-full bg-background px-4 py-6 shadow-xl"
+        className="relative w-full px-4 py-6 shadow-xl bg-background"
       >
-        <div className="mx-auto max-w-lg">
+        <div className="max-w-lg mx-auto">
           <h2 className="mb-6 text-xl font-semibold">
             Select delivery location
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                <Search className="h-5 w-5 text-muted-foreground" />
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                <Search className="w-5 h-5 text-muted-foreground" />
               </div>
               <input
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="Search for area, street name..."
-                className="w-full rounded-xl border-none bg-accent/50 py-4 pl-11 pr-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full py-4 pr-4 border-none rounded-xl bg-accent/50 pl-11 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <button
               type="submit"
-              className="w-full rounded-xl bg-primary px-6 py-4 text-base font-medium text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
+              className="w-full px-6 py-4 text-base font-medium transition-all shadow-lg rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl"
             >
               Confirm Location
             </button>
@@ -142,47 +142,47 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDF8F5] pb-20">
+    <div className="min-h-screen pb-20 bg-background">
       {/* Location Section */}
-      <div className="relative bg-[#E8D3D1] px-4 pb-8 pt-6">
+      <div className="relative px-4 pt-6 pb-6 bg-primary/10">
         {/* Location Selection */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-4"
         >
           <button
             onClick={() => setIsLocationModalOpen(true)}
-            className="flex w-full flex-col items-start"
+            className="flex flex-col items-start w-full"
           >
-            <span className="mb-1 text-xs font-medium uppercase tracking-wider text-[#9B6A6C]">
-              DELIVER TO
+            <span className="mb-1 text-xs font-medium tracking-wider uppercase text-primary/90">
+              YOUR LOCATION
             </span>
             <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-[#9B6A6C]" />
-              <span className="text-base font-medium text-[#4A3536] line-clamp-1">
+              <MapPin className="w-5 h-5 text-primary" />
+              <span className="text-base font-medium text-gray-800 line-clamp-1">
                 {userLocation}
               </span>
-              <ChevronRight className="ml-auto h-5 w-5 text-[#9B6A6C]" />
+              <ChevronRight className="w-5 h-5 ml-auto text-primary" />
             </div>
           </button>
         </motion.div>
       </div>
 
-      {/* Search Bar - Positioned to overlap both sections */}
+      {/* Search Bar */}
       <div className="relative px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="relative -mt-6 mb-6"
+          className="relative mb-6 -mt-4"
         >
-          <div className="flex items-center rounded-2xl bg-white p-4 shadow-lg ring-1 ring-black/5">
-            <Search className="h-5 w-5 text-muted-foreground" />
+          <div className="flex items-center p-4 shadow-lg rounded-2xl bg-background ring-1 ring-border/40">
+            <Search className="w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search services or artists..."
-              className="ml-3 flex-1 bg-transparent outline-none placeholder:text-muted-foreground/70"
+              className="flex-1 ml-3 bg-transparent outline-none placeholder:text-muted-foreground/70"
             />
           </div>
         </motion.div>
@@ -195,16 +195,20 @@ const HomePage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="mb-8 grid grid-cols-2 gap-4"
+          className="grid grid-cols-2 gap-4 mb-8"
         >
-          <button className="overflow-hidden rounded-3xl bg-[#D4AF37] p-6 text-left text-white shadow-lg">
+          <button className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-primary text-primary-foreground">
             <Sparkles className="mb-3 h-7 w-7" />
             <h3 className="text-xl font-semibold">Quick Book</h3>
-            <p className="text-sm text-white/90">Service in 60 mins</p>
+            <p className="text-sm text-primary-foreground/90">
+              Service in 60 mins
+            </p>
           </button>
-          <button className="overflow-hidden rounded-3xl bg-[#E8C5C5] p-6 text-left text-secondary-foreground shadow-lg">
-            <Star className="mb-3 h-7 w-7" />
-            <h3 className="text-xl font-semibold">Top Rated</h3>
+          <button className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-secondary">
+            <Star className="mb-3 h-7 w-7 text-secondary-foreground" />
+            <h3 className="text-xl font-semibold text-secondary-foreground">
+              Top Rated
+            </h3>
             <p className="text-sm text-secondary-foreground/90">
               Best of the best
             </p>
@@ -218,11 +222,13 @@ const HomePage = () => {
           transition={{ delay: 0.4 }}
           className="mb-8"
         >
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Popular Services</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-foreground">
+              Popular Services
+            </h2>
             <button className="flex items-center text-sm text-primary">
               See all
-              <ChevronRight className="ml-1 h-4 w-4" />
+              <ChevronRight className="w-4 h-4 ml-1" />
             </button>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -232,12 +238,14 @@ const HomePage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="rounded-2xl border bg-card p-4 shadow-sm transition-all hover:shadow-md"
+                className="p-4 transition-all border shadow-sm rounded-2xl border-border/40 bg-background hover:shadow-md"
               >
-                <div className="mb-3 rounded-full bg-primary/10 p-2 w-fit">
-                  {service.icon}
+                <div className="p-2 mb-3 rounded-full bg-primary/10 w-fit">
+                  <div className="text-primary">{service.icon}</div>
                 </div>
-                <h3 className="mb-1 font-semibold">{service.name}</h3>
+                <h3 className="mb-1 font-semibold text-foreground">
+                  {service.name}
+                </h3>
                 <p className="mb-2 text-sm text-muted-foreground">
                   {service.description}
                 </p>
@@ -255,11 +263,13 @@ const HomePage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Featured Artists</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-foreground">
+              Featured Artists
+            </h2>
             <button className="flex items-center text-sm text-primary">
               See all
-              <ChevronRight className="ml-1 h-4 w-4" />
+              <ChevronRight className="w-4 h-4 ml-1" />
             </button>
           </div>
           <div className="space-y-4">
@@ -269,20 +279,22 @@ const HomePage = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="flex items-center rounded-2xl border bg-card p-4 shadow-sm transition-all hover:shadow-md cursor-pointer"
+                className="flex items-center p-4 transition-all border shadow-sm cursor-pointer rounded-2xl border-border/40 bg-background hover:shadow-md"
                 onClick={() => handleArtistClick(artist.id)}
               >
                 <img
                   src={artist.image}
                   alt={artist.name}
-                  className="h-16 w-16 rounded-full object-cover"
+                  className="object-cover w-16 h-16 rounded-full"
                 />
-                <div className="ml-4 flex-1">
+                <div className="flex-1 ml-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold">{artist.name}</h3>
+                    <h3 className="font-semibold text-foreground">
+                      {artist.name}
+                    </h3>
                     <div className="flex items-center">
-                      <Star className="h-4 w-4 fill-primary text-primary" />
-                      <span className="ml-1 text-sm font-medium">
+                      <Star className="w-4 h-4 fill-primary text-primary" />
+                      <span className="ml-1 text-sm font-medium text-primary">
                         {artist.rating}
                       </span>
                     </div>
@@ -290,12 +302,12 @@ const HomePage = () => {
                   <p className="text-sm text-muted-foreground">
                     {artist.specialty}
                   </p>
-                  <div className="mt-1 flex items-center justify-between">
+                  <div className="flex items-center justify-between mt-1">
                     <span className="text-xs text-muted-foreground">
                       {artist.reviews} reviews
                     </span>
                     {artist.available ? (
-                      <span className="text-xs text-green-500">
+                      <span className="text-xs text-primary">
                         Available now
                       </span>
                     ) : (
