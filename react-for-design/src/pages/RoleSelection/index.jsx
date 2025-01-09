@@ -3,37 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Sparkles, Palette } from "lucide-react";
 
-const BellIcon = () => (
-  <svg
-    viewBox="0 0 100 100"
-    className="h-full w-full"
-    style={{ filter: "drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1))" }}
-  >
-    <path
-      d="M50 10 C30 10 15 25 15 45 L15 65 Q15 75 25 80 L75 80 Q85 75 85 65 L85 45 C85 25 70 10 50 10"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="6"
-      strokeLinecap="round"
-      className="text-rose-200"
-    />
-    <path
-      d="M35 80 Q50 90 65 80"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="6"
-      strokeLinecap="round"
-      className="text-rose-200"
-    />
-  </svg>
-);
-
 const RoleSelection = () => {
   const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
     localStorage.setItem("selectedRole", role);
-    navigate("/login");
+    navigate("/signup");
   };
 
   return (

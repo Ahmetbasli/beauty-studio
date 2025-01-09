@@ -4,6 +4,8 @@ import HomePage from "./pages/Home";
 import ArtistDetailPage from "./pages/ArtistDetail";
 import LoginPage from "./pages/Login";
 import RoleSelection from "./pages/RoleSelection";
+import SignUp from "./pages/SignUp";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route path="/" element={<RoleSelection />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/artist/:id" element={<ArtistDetailPage />} />
       </Routes>
     </Router>
