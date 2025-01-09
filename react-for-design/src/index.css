@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+@layer base {
+  :root {
+    --background: 40 33% 98%;
+    --foreground: 20 30% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 20 30% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 30% 10%;
+    --primary: 35 57% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 38% 84%;
+    --secondary-foreground: 20 30% 10%;
+    --muted: 40 33% 96%;
+    --muted-foreground: 20 10% 40%;
+    --accent: 35 57% 60%;
+    --accent-foreground: 20 30% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 20 5% 90%;
+    --input: 20 5% 90%;
+    --ring: 35 57% 60%;
+    --radius: 1rem;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  letter-spacing: 0.3px;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Better tap targets for mobile */
+@layer components {
+  .tap-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+}
