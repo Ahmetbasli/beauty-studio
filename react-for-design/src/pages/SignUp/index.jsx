@@ -47,7 +47,7 @@ const SignUp = () => {
               className="mx-auto mb-4 h-16 w-auto"
             />
             <p className="text-2xl font-medium text-foreground">
-              Sign in to continue
+              Create your account
             </p>
           </motion.div>
 
@@ -62,7 +62,7 @@ const SignUp = () => {
               <span className="mr-2 font-medium text-primary">Step 2</span>
               <span className="text-primary/80">of 3</span>
               <span className="ml-3 text-sm text-muted-foreground">
-                • Sign in with Google
+                • Connect with Google
               </span>
             </div>
           </motion.div>
@@ -72,18 +72,20 @@ const SignUp = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mb-10 flex items-center justify-center gap-3"
+            className="mb-10 flex items-center justify-center gap-3 rounded-full border border-border/40 bg-background/95 px-4 py-2"
           >
-            <div className="rounded-full bg-primary/10 p-3">
+            <div className="rounded-full bg-primary/10 p-2">
               {selectedRole === "artist" ? (
-                <Palette className="h-6 w-6 text-primary" />
+                <Palette className="h-5 w-5 text-primary" />
               ) : (
-                <Sparkles className="h-6 w-6 text-primary" />
+                <Sparkles className="h-5 w-5 text-primary" />
               )}
             </div>
-            <span className="text-lg font-medium text-muted-foreground">
-              Signing up as a{" "}
-              {selectedRole === "artist" ? "Beauty Artist" : "Customer"}
+            <span className="text-sm text-muted-foreground">
+              You are registering as a{" "}
+              <span className="font-medium text-foreground">
+                {selectedRole === "artist" ? "Beauty Artist" : "Customer"}
+              </span>
             </span>
           </motion.div>
 
@@ -125,9 +127,15 @@ const SignUp = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="mt-8 max-w-sm text-center text-sm text-muted-foreground"
+            className="mt-8 text-center text-sm text-muted-foreground"
           >
-            By continuing, you agree to our Terms of Service and Privacy Policy
+            Already have an account?{" "}
+            <button
+              onClick={() => navigate("/login")}
+              className="font-semibold text-primary hover:underline"
+            >
+              Log in
+            </button>
           </motion.p>
         </div>
       </div>

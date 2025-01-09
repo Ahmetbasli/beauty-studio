@@ -45,7 +45,9 @@ const Login = () => {
               alt="Beauty Studio"
               className="mx-auto mb-4 h-16 w-auto"
             />
-            <p className="text-2xl font-medium text-foreground">Welcome back</p>
+            <p className="text-2xl font-medium text-foreground">
+              Log in to your account
+            </p>
           </motion.div>
 
           {/* Login Form */}
@@ -86,14 +88,14 @@ const Login = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="mt-8 text-center text-base text-muted-foreground"
+            className="mt-8 text-center text-sm text-muted-foreground"
           >
-            Don't have an account?{" "}
+            New to Beauty Studio?{" "}
             <button
               onClick={() => navigate("/")}
               className="font-semibold text-primary hover:underline"
             >
-              Sign up
+              Create an account
             </button>
           </motion.p>
         </div>
