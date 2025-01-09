@@ -41,9 +41,11 @@ const SignUp = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8 text-center"
           >
-            <h1 className="mb-4 text-5xl font-bold text-primary">
-              Beauty Studio
-            </h1>
+            <img
+              src="/logo-bell.png"
+              alt="Beauty Studio"
+              className="mx-auto mb-4 h-16 w-auto"
+            />
             <p className="text-2xl font-medium text-foreground">
               Sign in to continue
             </p>

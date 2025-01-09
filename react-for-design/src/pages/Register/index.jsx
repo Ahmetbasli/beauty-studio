@@ -42,9 +42,11 @@ const Register = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8 text-center"
           >
-            <h1 className="mb-4 text-5xl font-bold text-primary">
-              Beauty Studio
-            </h1>
+            <img
+              src="/logo-bell.png"
+              alt="Beauty Studio"
+              className="mx-auto mb-4 h-16 w-auto"
+            />
             <p className="text-2xl font-medium text-foreground">
               Complete your profile
             </p>
@@ -210,27 +212,6 @@ const Register = () => {
                         className="w-full rounded-lg border-0 bg-transparent px-2 py-2 text-foreground focus:outline-none"
                       />
                     </div>
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="serviceArea"
-                      className="mb-2 block text-sm font-medium text-foreground"
-                    >
-                      Service Area
-                    </label>
-                    <select
-                      id="serviceArea"
-                      className="w-full rounded-lg border border-input bg-background px-4 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                      required
-                    >
-                      <option value="">Select area</option>
-                      <option value="manhattan">Manhattan</option>
-                      <option value="brooklyn">Brooklyn</option>
-                      <option value="queens">Queens</option>
-                      <option value="bronx">Bronx</option>
-                      <option value="staten_island">Staten Island</option>
-                    </select>
                   </div>
                 </>
               )}

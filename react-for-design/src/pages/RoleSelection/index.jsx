@@ -27,9 +27,11 @@ const RoleSelection = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8 text-center"
         >
-          <h1 className="mb-4 text-5xl font-bold text-primary">
-            Beauty Studio
-          </h1>
+          <img
+            src="/logo-bell.png"
+            alt="Beauty Studio"
+            className="mx-auto mb-4 h-16 w-auto"
+          />
           <p className="text-2xl font-medium text-foreground">
             How would you like to join?
           </p>
@@ -52,19 +54,19 @@ const RoleSelection = () => {
         </motion.div>
 
         {/* Simple Role Selection */}
-        <div className="flex w-full max-w-xl justify-center gap-5">
+        <div className="flex w-full max-w-xl justify-center gap-3">
           {/* Artist Button */}
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             onClick={() => handleRoleSelect("artist")}
-            className="group flex w-1/2 flex-col items-center rounded-2xl bg-card p-8 text-center shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+            className="group flex w-1/2 flex-col items-center rounded-2xl bg-card p-6 text-center shadow-lg transition-all hover:scale-105 hover:shadow-xl"
           >
-            <div className="mb-6 rounded-full bg-primary/10 p-6">
+            <div className="mb-4 rounded-full bg-primary/10 p-6">
               <Palette className="h-14 w-14 text-primary" />
             </div>
-            <h2 className="mb-3 text-2xl font-bold">Beauty Artist</h2>
+            <h2 className="mb-2 text-2xl font-bold">Beauty Artist</h2>
             <p className="text-base font-medium text-muted-foreground">
               I want to provide beauty services
             </p>
@@ -76,12 +78,12 @@ const RoleSelection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             onClick={() => handleRoleSelect("customer")}
-            className="group flex w-1/2 flex-col items-center rounded-2xl bg-card p-8 text-center shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+            className="group flex w-1/2 flex-col items-center rounded-2xl bg-card p-6 text-center shadow-lg transition-all hover:scale-105 hover:shadow-xl"
           >
-            <div className="mb-6 rounded-full bg-primary/10 p-6">
+            <div className="mb-4 rounded-full bg-primary/10 p-6">
               <Sparkles className="h-14 w-14 text-primary" />
             </div>
-            <h2 className="mb-3 text-2xl font-bold">Customer</h2>
+            <h2 className="mb-2 text-2xl font-bold">Customer</h2>
             <p className="text-base font-medium text-muted-foreground">
               I want to book beauty services
             </p>
