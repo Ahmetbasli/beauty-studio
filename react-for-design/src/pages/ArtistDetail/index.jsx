@@ -1,48 +1,128 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Star, Clock, MapPin, Award } from "lucide-react";
+import {
+  Star,
+  MapPin,
+  Clock,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  ArrowLeft,
+  Check,
+} from "lucide-react";
 
-// Mock data for the artist
+// Mock artist data
 const artistData = {
+  id: 1,
   name: "Sarah Mitchell",
+  specialty: "Makeup Artist",
   rating: 4.9,
   reviews: 127,
-  specialty: "Makeup Artist & Hair Stylist",
-  experience: "8+ years",
-  location: "San Francisco Bay Area",
-  price: "$79/hour",
-  image: "https://i.pravatar.cc/400?img=1",
+  experience: "5+ years",
   description:
-    "Certified makeup artist specializing in bridal, editorial, and natural makeup. Expert in all skin types and tones. Creating personalized looks that enhance your natural beauty.",
+    "Professional makeup artist specializing in bridal and special occasion makeup. Known for creating flawless, long-lasting looks tailored to each client's unique style.",
+  image: "https://i.pravatar.cc/400?img=1",
+  location: "Denpasar, Bali",
+  distance: "2.3 km away",
+  badges: ["Celebrity Choice", "Award Winner"],
   services: [
     {
+      id: 1,
       name: "Bridal Makeup",
       duration: "120 min",
-      price: "$150",
+      price: "$199",
     },
     {
-      name: "Evening Makeup",
+      id: 2,
+      name: "Party Makeup",
       duration: "60 min",
-      price: "$79",
+      price: "$89",
     },
     {
-      name: "Hair Styling",
+      id: 3,
+      name: "Natural Makeup",
       duration: "45 min",
-      price: "$65",
+      price: "$69",
     },
-  ],
-  availability: ["Mon-Fri: 9am-7pm", "Sat: 8am-8pm", "Sun: 10am-6pm"],
-  certificates: [
-    "Professional Makeup Artist Certificate",
-    "Hair Styling License",
   ],
 };
 
-const ArtistDetailPage = () => {
-  // Scroll to top when component mounts
+// Mock schedule data
+const generateTimeSlots = () => {
+  const today = new Date();
+  const slots = [];
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+    const daySlots = [];
+    // Generate slots from 9 AM to 7 PM
+    for (let hour = 9; hour <= 19; hour++) {
+      const isBooked = Math.random() < 0.3; // 30% chance of being booked
+      daySlots.push({
+        time: `${hour}:00`,
+        available: !isBooked,
+      });
+      if (hour !== 19) {
+        daySlots.push({
+          time: `${hour}:30`,
+          available: !isBooked,
+        });
+      }
+    }
+    slots.push({
+      date,
+      slots: daySlots,
+    });
+  }
+  return slots;
+};
+
+const ArtistDetail = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedService, setSelectedService] = useState(null);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [schedule] = useState(generateTimeSlots());
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    setSelectedTimeSlot(null);
+  };
+
+  const handleServiceSelect = (service) => {
+    setSelectedService(service);
+  };
+
+  const handleTimeSelect = (slot) => {
+    if (slot.available && selectedService) {
+      setSelectedTimeSlot(slot);
+      setShowConfirmation(true);
+    }
+  };
+
+  const formatDate = (date) => {
+    return new Intl.DateTimeFormat("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    }).format(date);
+  };
+
+  const isToday = (date) => {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -55,148 +135,185 @@ const ArtistDetailPage = () => {
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/95" />
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute top-4 left-4 tap-target rounded-full bg-background/80 p-2 backdrop-blur-sm"
-          onClick={() => window.history.back()}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-4 left-4 p-2 rounded-full bg-background/80 backdrop-blur-sm"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </motion.button>
+          <ArrowLeft className="w-6 h-6" />
+        </button>
       </div>
 
       {/* Content Section */}
       <div className="relative -mt-20 px-4">
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="rounded-3xl bg-card p-6 shadow-lg"
-        >
-          {/* Artist Info */}
-          <div className="mb-6 flex items-start justify-between">
-            <div>
-              <h1 className="mb-1 text-2xl font-semibold">{artistData.name}</h1>
-              <p className="text-muted-foreground">{artistData.specialty}</p>
-              <div className="mt-2 flex items-center gap-1">
-                <Star className="h-4 w-4 fill-primary text-primary" />
-                <span className="font-medium">{artistData.rating}</span>
-                <span className="text-muted-foreground">
-                  ({artistData.reviews} reviews)
-                </span>
+        <div className="mb-6">
+          <h1 className="text-2xl font-semibold text-foreground mb-2">
+            {artistData.name}
+          </h1>
+          <div className="flex items-center gap-2 text-muted-foreground mb-3">
+            <MapPin className="w-4 h-4" />
+            <span className="text-sm">{artistData.location}</span>
+            <span className="text-sm">•</span>
+            <span className="text-sm">{artistData.distance}</span>
+          </div>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center">
+              <Star className="w-4 h-4 fill-primary text-primary" />
+              <span className="ml-1 font-medium">{artistData.rating}</span>
+            </div>
+            <span className="text-sm text-muted-foreground">
+              ({artistData.reviews} reviews)
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {artistData.badges.map((badge, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 text-sm font-medium rounded-full bg-primary/10 text-primary"
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Services */}
+        <section className="mb-6">
+          <h2 className="text-lg font-medium mb-4">Services</h2>
+          <div className="grid gap-3">
+            {artistData.services.map((service) => (
+              <div
+                key={service.id}
+                onClick={() => handleServiceSelect(service)}
+                className={`p-4 border rounded-2xl cursor-pointer transition-all ${
+                  selectedService?.id === service.id
+                    ? "border-primary bg-primary/5"
+                    : "border-border/40 hover:bg-accent/50"
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-medium">{service.name}</h3>
+                  <span className="text-primary font-medium">{service.price}</span>
+                </div>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Clock className="w-4 h-4 mr-1" />
+                  {service.duration}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Calendar */}
+        <section className="mb-6">
+          <h2 className="text-lg font-medium mb-4">Select Date</h2>
+          <div className="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
+            {schedule.map(({ date }, index) => (
+              <button
+                key={index}
+                onClick={() => handleDateSelect(date)}
+                className={`flex-shrink-0 p-3 rounded-xl border transition-all ${
+                  selectedDate.getDate() === date.getDate()
+                    ? "border-primary bg-primary/5"
+                    : "border-border/40"
+                }`}
+              >
+                <div className="text-sm font-medium">
+                  {isToday(date) ? "Today" : formatDate(date)}
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Time Slots */}
+        {selectedService && (
+          <section className="mb-6">
+            <h2 className="text-lg font-medium mb-4">Available Times</h2>
+            <div className="grid grid-cols-3 gap-2">
+              {schedule
+                .find(
+                  (s) => s.date.getDate() === selectedDate.getDate()
+                )
+                ?.slots.map((slot, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleTimeSelect(slot)}
+                    disabled={!slot.available}
+                    className={`p-3 rounded-xl border text-sm font-medium transition-all ${
+                      selectedTimeSlot?.time === slot.time
+                        ? "border-primary bg-primary/5 text-primary"
+                        : slot.available
+                        ? "border-border/40 hover:bg-accent/50"
+                        : "border-border/40 bg-accent/50 text-muted-foreground cursor-not-allowed"
+                    }`}
+                  >
+                    {slot.time}
+                  </button>
+                ))}
+            </div>
+          </section>
+        )}
+
+        {/* About */}
+        <section className="mb-6">
+          <h2 className="text-lg font-medium mb-4">About</h2>
+          <p className="text-muted-foreground">{artistData.description}</p>
+        </section>
+      </div>
+
+      {/* Booking Button */}
+      {selectedService && selectedTimeSlot && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border/40">
+          <button
+            onClick={() => setShowConfirmation(true)}
+            className="w-full py-4 bg-primary text-primary-foreground rounded-xl font-medium"
+          >
+            Book for {selectedTimeSlot.time}
+          </button>
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {showConfirmation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-full max-w-sm mx-4 p-6 bg-background rounded-3xl"
+          >
+            <div className="flex justify-center mb-6">
+              <div className="p-4 rounded-full bg-primary/10">
+                <Check className="w-8 h-8 text-primary" />
               </div>
             </div>
-            <div className="rounded-xl bg-primary/10 px-4 py-2 text-center">
-              <p className="text-sm font-medium text-primary">from</p>
-              <p className="text-lg font-semibold text-primary">
-                {artistData.price}
+            <div className="text-center mb-6">
+              <h2 className="text-xl font-semibold mb-2">Confirm Booking</h2>
+              <p className="text-muted-foreground">
+                {selectedService.name} with {artistData.name}
+              </p>
+              <p className="font-medium text-foreground mt-1">
+                {formatDate(selectedDate)} at {selectedTimeSlot.time}
               </p>
             </div>
-          </div>
-
-          {/* Quick Info */}
-          <div className="mb-6 grid grid-cols-2 gap-4">
-            <div className="flex items-center gap-2 rounded-lg border p-3">
-              <Clock className="h-5 w-5 text-primary" />
-              <div>
-                <p className="text-sm font-medium">Experience</p>
-                <p className="text-sm text-muted-foreground">
-                  {artistData.experience}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 rounded-lg border p-3">
-              <MapPin className="h-5 w-5 text-primary" />
-              <div>
-                <p className="text-sm font-medium">Location</p>
-                <p className="text-sm text-muted-foreground">
-                  {artistData.location}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Description */}
-          <div className="mb-6">
-            <h2 className="mb-2 text-lg font-semibold">About</h2>
-            <p className="text-muted-foreground">{artistData.description}</p>
-          </div>
-
-          {/* Services */}
-          <div className="mb-6">
-            <h2 className="mb-3 text-lg font-semibold">Services</h2>
             <div className="space-y-3">
-              {artistData.services.map((service, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between rounded-lg border p-4"
-                >
-                  <div>
-                    <p className="font-medium">{service.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {service.duration}
-                    </p>
-                  </div>
-                  <p className="font-semibold text-primary">{service.price}</p>
-                </div>
-              ))}
+              <button
+                onClick={() => navigate("/home")}
+                className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-medium"
+              >
+                Confirm Booking
+              </button>
+              <button
+                onClick={() => setShowConfirmation(false)}
+                className="w-full py-3 bg-accent text-foreground rounded-xl font-medium"
+              >
+                Change Time
+              </button>
             </div>
-          </div>
-
-          {/* Availability */}
-          <div className="mb-6">
-            <h2 className="mb-3 text-lg font-semibold">Availability</h2>
-            <div className="flex flex-wrap gap-2">
-              {artistData.availability.map((time, index) => (
-                <div
-                  key={index}
-                  className="rounded-lg bg-secondary/10 px-3 py-1.5 text-sm text-secondary-foreground"
-                >
-                  {time}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Certificates */}
-          <div className="mb-8">
-            <h2 className="mb-3 text-lg font-semibold">Certificates</h2>
-            <div className="space-y-2">
-              {artistData.certificates.map((certificate, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-2 text-muted-foreground"
-                >
-                  <Award className="h-4 w-4 text-primary" />
-                  <span>{certificate}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Book Now Button */}
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            className="tap-target w-full rounded-xl bg-primary px-8 py-4 font-semibold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90"
-          >
-            Book Appointment
-          </motion.button>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ArtistDetailPage;
+export default ArtistDetail;

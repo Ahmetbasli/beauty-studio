@@ -11,6 +11,11 @@ import {
   Star,
   ChevronRight,
   X,
+  ArrowLeft,
+  Target,
+  Clock,
+  MoreVertical,
+  Map,
 } from "lucide-react";
 
 // Mock data
@@ -72,57 +77,125 @@ const featuredArtists = [
 ];
 
 const LocationModal = ({ isOpen, onClose }) => {
-  const [location, setLocation] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [savedLocations, setSavedLocations] = useState([
+    {
+      id: 1,
+      name: "Current location",
+      address:
+        "No.2 Jalan Jaya Giri XIV, Jl. Jaya Giri XIV No. 2, Dangin Puri Kelod, Denpasar Timur, Kota Denpasar",
+      isCurrent: true,
+    },
+    {
+      id: 2,
+      name: "Home",
+      address:
+        "Jl. Poppies Lane 1, Gg. Sorga, Kuta, Kuta, Badung, Bali, Indonesia, 80361",
+    },
+    {
+      id: 3,
+      name: "Office",
+      address:
+        "Jl. Sedap Malam No. 10, Sanur Kaja, Denpasar Selatan, Kota Denpasar, Bali, Indonesia, 80227",
+    },
+  ]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here you would handle location update
-    localStorage.setItem("userLocation", location);
+  const handleLocationSelect = (location) => {
+    localStorage.setItem("userLocation", location.name);
     onClose();
+  };
+
+  const handleAddLocation = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      const newLocation = {
+        id: savedLocations.length + 1,
+        name: searchQuery,
+        address: searchQuery, // In a real app, this would be properly formatted address
+      };
+      setSavedLocations([...savedLocations, newLocation]);
+      setSearchQuery("");
+    }
   };
 
   if (!isOpen) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-start justify-center bg-black/50"
-    >
-      <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -20, opacity: 0 }}
-        className="relative w-full px-4 py-6 shadow-xl bg-background"
-      >
-        <div className="max-w-lg mx-auto">
-          <h2 className="mb-6 text-xl font-semibold">
-            Select delivery location
-          </h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                <Search className="w-5 h-5 text-muted-foreground" />
-              </div>
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="Search for area, street name..."
-                className="w-full py-4 pr-4 border-none rounded-xl bg-accent/50 pl-11 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full px-6 py-4 text-base font-medium transition-all shadow-lg rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl"
-            >
-              Confirm Location
-            </button>
-          </form>
+    <div className="fixed inset-0 z-50 bg-background">
+      {/* Header */}
+      <div className="flex items-center gap-4 p-4 border-b bg-background border-border/40">
+        <button onClick={onClose} className="p-2 rounded-full hover:bg-accent">
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <div className="flex-1">
+          <h2 className="text-lg font-medium">Your Locations</h2>
         </div>
-      </motion.div>
-    </motion.div>
+        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent">
+          <span className="text-xs font-medium">Bali</span>
+        </div>
+      </div>
+
+      {/* Search Input */}
+      <div className="p-4 border-b border-border/40">
+        <form onSubmit={handleAddLocation} className="relative">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Enter a new location..."
+            className="w-full px-4 py-3 pr-12 bg-accent/50 rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+          />
+          <button
+            type="submit"
+            className="absolute p-2 -translate-y-1/2 rounded-full right-2 top-1/2 hover:bg-accent"
+          >
+            <Search className="w-5 h-5 text-primary" />
+          </button>
+        </form>
+      </div>
+
+      {/* Saved Locations List */}
+      <div className="flex-1 overflow-auto">
+        <div className="p-4 space-y-4">
+          {savedLocations.map((location) => (
+            <div
+              key={location.id}
+              onClick={() => handleLocationSelect(location)}
+              className="flex items-start gap-4 p-4 cursor-pointer hover:bg-accent/50 rounded-2xl"
+            >
+              {location.isCurrent ? (
+                <div className="p-2 rounded-full bg-accent">
+                  <Target className="w-5 h-5 text-primary" />
+                </div>
+              ) : (
+                <div className="p-2 rounded-full bg-accent">
+                  <MapPin className="w-5 h-5 text-primary" />
+                </div>
+              )}
+              <div className="flex-1">
+                <h3 className="mb-1 font-medium text-foreground">
+                  {location.name}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {location.address}
+                </p>
+              </div>
+              <button className="p-2 rounded-full hover:bg-accent">
+                <MoreVertical className="w-5 h-5 text-muted-foreground" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom Action */}
+      <div className="p-4 border-t border-border/40">
+        <button className="flex items-center justify-center w-full gap-2 p-4 font-medium border bg-background border-border/40 rounded-xl text-foreground hover:bg-accent/50">
+          <Map className="w-5 h-5" />
+          Choose from map
+        </button>
+      </div>
+    </div>
   );
 };
 
@@ -197,14 +270,20 @@ const HomePage = () => {
           transition={{ delay: 0.3 }}
           className="grid grid-cols-2 gap-4 mb-8"
         >
-          <button className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-primary/5">
+          <button
+            onClick={() => navigate("/quick-book")}
+            className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-primary/5"
+          >
             <Sparkles className="mb-3 h-7 w-7 text-primary" />
             <h3 className="text-xl font-semibold text-foreground">
               Quick Book
             </h3>
             <p className="text-sm text-muted-foreground">Service in 60 mins</p>
           </button>
-          <button className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-secondary/5">
+          <button
+            onClick={() => navigate("/top-rated")}
+            className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-secondary/5"
+          >
             <Star className="mb-3 h-7 w-7 text-secondary" />
             <h3 className="text-xl font-semibold text-foreground">Top Rated</h3>
             <p className="text-sm text-muted-foreground">Best of the best</p>
