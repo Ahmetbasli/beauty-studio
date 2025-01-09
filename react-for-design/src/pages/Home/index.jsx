@@ -144,7 +144,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen pb-20 bg-background">
       {/* Location Section */}
-      <div className="relative px-4 pt-6 pb-6 bg-primary/10">
+      <div className="relative px-4 pt-6 pb-6 bg-primary">
         {/* Location Selection */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -155,15 +155,15 @@ const HomePage = () => {
             onClick={() => setIsLocationModalOpen(true)}
             className="flex flex-col items-start w-full"
           >
-            <span className="mb-1 text-xs font-medium tracking-wider uppercase text-primary/90">
+            <span className="mb-1 text-xs font-medium tracking-wider uppercase text-primary-foreground/90">
               YOUR LOCATION
             </span>
             <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-primary" />
-              <span className="text-base font-medium text-gray-800 line-clamp-1">
+              <MapPin className="w-5 h-5 text-primary-foreground" />
+              <span className="text-base font-medium text-primary-foreground line-clamp-1">
                 {userLocation}
               </span>
-              <ChevronRight className="w-5 h-5 ml-auto text-primary" />
+              <ChevronRight className="w-5 h-5 ml-auto text-primary-foreground/90" />
             </div>
           </button>
         </motion.div>
@@ -177,12 +177,12 @@ const HomePage = () => {
           transition={{ delay: 0.1 }}
           className="relative mb-6 -mt-4"
         >
-          <div className="flex items-center p-4 shadow-lg rounded-2xl bg-background ring-1 ring-border/40">
+          <div className="flex items-center p-4 shadow-lg bg-background rounded-2xl ring-1 ring-border/40">
             <Search className="w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search services or artists..."
-              className="flex-1 ml-3 bg-transparent outline-none placeholder:text-muted-foreground/70"
+              className="flex-1 ml-3 bg-transparent outline-none placeholder:text-muted-foreground"
             />
           </div>
         </motion.div>
@@ -197,21 +197,17 @@ const HomePage = () => {
           transition={{ delay: 0.3 }}
           className="grid grid-cols-2 gap-4 mb-8"
         >
-          <button className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-primary text-primary-foreground">
-            <Sparkles className="mb-3 h-7 w-7" />
-            <h3 className="text-xl font-semibold">Quick Book</h3>
-            <p className="text-sm text-primary-foreground/90">
-              Service in 60 mins
-            </p>
-          </button>
-          <button className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-secondary">
-            <Star className="mb-3 h-7 w-7 text-secondary-foreground" />
-            <h3 className="text-xl font-semibold text-secondary-foreground">
-              Top Rated
+          <button className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-primary/5">
+            <Sparkles className="mb-3 h-7 w-7 text-primary" />
+            <h3 className="text-xl font-semibold text-foreground">
+              Quick Book
             </h3>
-            <p className="text-sm text-secondary-foreground/90">
-              Best of the best
-            </p>
+            <p className="text-sm text-muted-foreground">Service in 60 mins</p>
+          </button>
+          <button className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-secondary/5">
+            <Star className="mb-3 h-7 w-7 text-secondary" />
+            <h3 className="text-xl font-semibold text-foreground">Top Rated</h3>
+            <p className="text-sm text-muted-foreground">Best of the best</p>
           </button>
         </motion.div>
 
@@ -238,9 +234,9 @@ const HomePage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="p-4 transition-all border shadow-sm rounded-2xl border-border/40 bg-background hover:shadow-md"
+                className="p-4 transition-all border shadow-sm bg-background border-border/40 rounded-2xl hover:shadow-md"
               >
-                <div className="p-2 mb-3 rounded-full bg-primary/10 w-fit">
+                <div className="p-2 mb-3 rounded-full bg-primary/5 w-fit">
                   <div className="text-primary">{service.icon}</div>
                 </div>
                 <h3 className="mb-1 font-semibold text-foreground">
@@ -279,7 +275,7 @@ const HomePage = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="flex items-center p-4 transition-all border shadow-sm cursor-pointer rounded-2xl border-border/40 bg-background hover:shadow-md"
+                className="flex items-center p-4 transition-all border shadow-sm cursor-pointer bg-background border-border/40 rounded-2xl hover:shadow-md"
                 onClick={() => handleArtistClick(artist.id)}
               >
                 <img
