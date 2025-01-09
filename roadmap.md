@@ -131,3 +131,47 @@
 - Prioritize user security and privacy
 - Build a strong support system
 - Stay compliant with local regulations
+
+
+
+
+Create a modern mobile app homepage design for a beauty service booking app similar to Uber but for beauty services. The app allows women to book beauty professionals to come to their homes.
+
+Key requirements:
+1. Main purpose: Allow users to easily browse and book beauty services at home
+2. Target audience: Women looking for convenient beauty services
+3. Style: Clean, feminine, and professional
+
+Essential elements to include:
+- Search/location bar at the top
+- Main service categories (nails, makeup, hair, etc.) as scrollable cards
+- Currently available nearby beauty artists
+- Special offers or promotions section
+- Bottom navigation with icons for:
+  * Home
+  * Bookings
+  * Profile
+
+Important features to highlight:
+- Real-time availability of beauty artists
+- Quick booking option
+- Artist ratings and reviews
+- Price ranges
+
+Design guidelines:
+- Use a light, clean color scheme
+- Prioritize visual elements like service photos
+- Make CTAs clear and prominent
+- Ensure easy one-handed navigation
+- Include artist profile photos
+- Show rating stars clearly
+
+Please provide:
+1. The complete UI layout
+2. Color scheme suggestions
+3. Typography recommendations
+4. Icon style guide
+5. Component hierarchy
+6. Interactive elements specification
+
+The design should focus on simplicity and ease of use while maintaining a premium, trustworthy feel.
