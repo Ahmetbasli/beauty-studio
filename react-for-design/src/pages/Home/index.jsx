@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
   MapPin,
@@ -10,6 +10,7 @@ import {
   Palette,
   Star,
   ChevronRight,
+  X,
 } from "lucide-react";
 
 // Mock data
@@ -70,8 +71,66 @@ const featuredArtists = [
   },
 ];
 
+const LocationModal = ({ isOpen, onClose }) => {
+  const [location, setLocation] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you would handle location update
+    localStorage.setItem("userLocation", location);
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/50"
+    >
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: -20, opacity: 0 }}
+        className="relative w-full bg-background px-4 py-6 shadow-xl"
+      >
+        <div className="mx-auto max-w-lg">
+          <h2 className="mb-6 text-xl font-semibold">
+            Select delivery location
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="relative">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                <Search className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Search for area, street name..."
+                className="w-full rounded-xl border-none bg-accent/50 py-4 pl-11 pr-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full rounded-xl bg-primary px-6 py-4 text-base font-medium text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
+            >
+              Confirm Location
+            </button>
+          </form>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const HomePage = () => {
   const navigate = useNavigate();
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const userLocation =
+    localStorage.getItem("userLocation") || "Select Location";
 
   // Reset scroll position when component mounts
   useEffect(() => {
@@ -83,46 +142,48 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      {/* Header */}
-      <div className="relative bg-primary/5 px-4 pt-12 pb-24">
-        <div className="mb-8">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-2 text-3xl font-semibold"
+    <div className="min-h-screen bg-[#FDF8F5] pb-20">
+      {/* Location Section */}
+      <div className="relative bg-[#E8D3D1] px-4 pb-8 pt-6">
+        {/* Location Selection */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <button
+            onClick={() => setIsLocationModalOpen(true)}
+            className="flex w-full flex-col items-start"
           >
-            Hey Nadya 👋
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-muted-foreground"
-          >
-            Book your beauty service for today
-          </motion.p>
-        </div>
+            <span className="mb-1 text-xs font-medium uppercase tracking-wider text-[#9B6A6C]">
+              DELIVER TO
+            </span>
+            <div className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-[#9B6A6C]" />
+              <span className="text-base font-medium text-[#4A3536] line-clamp-1">
+                {userLocation}
+              </span>
+              <ChevronRight className="ml-auto h-5 w-5 text-[#9B6A6C]" />
+            </div>
+          </button>
+        </motion.div>
+      </div>
 
-        {/* Search Bar */}
+      {/* Search Bar - Positioned to overlap both sections */}
+      <div className="relative px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="relative"
+          transition={{ delay: 0.1 }}
+          className="relative -mt-6 mb-6"
         >
-          <div className="flex items-center rounded-2xl bg-background p-4 shadow-lg">
+          <div className="flex items-center rounded-2xl bg-white p-4 shadow-lg ring-1 ring-black/5">
             <Search className="h-5 w-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search services or artists..."
               className="ml-3 flex-1 bg-transparent outline-none placeholder:text-muted-foreground/70"
             />
-            <div className="h-6 w-[1px] bg-border"></div>
-            <button className="ml-3 flex items-center text-muted-foreground">
-              <MapPin className="h-5 w-5" />
-              <span className="ml-2">Location</span>
-            </button>
           </div>
         </motion.div>
       </div>
@@ -134,19 +195,17 @@ const HomePage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="-mt-12 mb-8 grid grid-cols-2 gap-4"
+          className="mb-8 grid grid-cols-2 gap-4"
         >
-          <button className="rounded-2xl bg-primary p-4 text-left text-primary-foreground shadow-lg">
-            <Sparkles className="mb-2 h-6 w-6" />
-            <h3 className="text-lg font-semibold">Quick Book</h3>
-            <p className="text-sm text-primary-foreground/80">
-              Service in 60 mins
-            </p>
+          <button className="overflow-hidden rounded-3xl bg-[#D4AF37] p-6 text-left text-white shadow-lg">
+            <Sparkles className="mb-3 h-7 w-7" />
+            <h3 className="text-xl font-semibold">Quick Book</h3>
+            <p className="text-sm text-white/90">Service in 60 mins</p>
           </button>
-          <button className="rounded-2xl bg-secondary p-4 text-left text-secondary-foreground shadow-lg">
-            <Star className="mb-2 h-6 w-6" />
-            <h3 className="text-lg font-semibold">Top Rated</h3>
-            <p className="text-sm text-secondary-foreground/80">
+          <button className="overflow-hidden rounded-3xl bg-[#E8C5C5] p-6 text-left text-secondary-foreground shadow-lg">
+            <Star className="mb-3 h-7 w-7" />
+            <h3 className="text-xl font-semibold">Top Rated</h3>
+            <p className="text-sm text-secondary-foreground/90">
               Best of the best
             </p>
           </button>
@@ -251,6 +310,16 @@ const HomePage = () => {
           </div>
         </motion.section>
       </div>
+
+      {/* Location Modal */}
+      <AnimatePresence>
+        {isLocationModalOpen && (
+          <LocationModal
+            isOpen={isLocationModalOpen}
+            onClose={() => setIsLocationModalOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
