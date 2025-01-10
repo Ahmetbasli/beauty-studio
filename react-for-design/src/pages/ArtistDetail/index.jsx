@@ -235,7 +235,7 @@ const ArtistDetailPage = () => {
             onClick={() => navigate(-1)}
             className="p-2 transition-colors rounded-full bg-white/90 backdrop-blur-sm hover:bg-white"
           >
-            <ArrowLeft className="w-5 h-5 text-primary-800" />
+            <ArrowLeft className="w-5 h-5 text-secondary-800" />
           </motion.button>
           <div className="flex gap-3">
             <motion.button
@@ -244,7 +244,7 @@ const ArtistDetailPage = () => {
               transition={{ delay: 0.1 }}
               className="p-2.5 transition-all rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:shadow-md active:scale-95"
             >
-              <Share2 className="w-[18px] h-[18px] text-primary-800" />
+              <Share2 className="w-[18px] h-[18px] text-secondary-800" />
             </motion.button>
             <motion.button
               initial={{ opacity: 0 }}
@@ -261,7 +261,7 @@ const ArtistDetailPage = () => {
                 className={`w-[18px] h-[18px] transition-colors ${
                   isLiked
                     ? "fill-secondary-800 text-secondary-800"
-                    : "text-primary-800"
+                    : "text-secondary-800"
                 }`}
               />
             </motion.button>
