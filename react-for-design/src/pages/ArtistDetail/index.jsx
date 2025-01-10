@@ -29,7 +29,7 @@ const artistData = {
   image: "https://i.pravatar.cc/300?img=1",
   verified: true,
   description:
-    "Professional makeup artist with 8+ years of experience specializing in bridal, editorial, and natural makeup looks. Featured in Vogue and Elle magazines. My passion for makeup artistry began during my time at the London College of Fashion, where I trained under industry veterans. I've since worked with countless brides, models, and celebrities, creating looks that enhance natural beauty while ensuring long-lasting results. My expertise includes airbrush makeup, traditional application, and special occasion styling. I stay current with the latest trends and techniques through regular masterclasses and workshops. My work has been featured in multiple wedding magazines, and I've been recognized as one of Bali's top bridal makeup artists. I use only premium, cruelty-free products and specialize in creating looks that photograph beautifully and last throughout any event.",
+    "Professional makeup artist with 8+ years of experience specializing in bridal, editorial, and natural makeup looks. Featured in Vogue and Elle magazines.",
   services: [
     {
       id: 1,
@@ -197,7 +197,6 @@ const ArtistDetailPage = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const handleBooking = (bookingDetails) => {
     console.log("Booking confirmed:", bookingDetails);
@@ -286,21 +285,9 @@ const ArtistDetailPage = () => {
           </div>
         </div>
 
-        <div className="relative mt-4">
-          <p
-            className={`text-sm text-muted-foreground ${
-              !isDescriptionExpanded && "line-clamp-2"
-            }`}
-          >
-            {artistData.description}
-          </p>
-          <button
-            onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-            className="mt-1 text-sm font-medium text-primary hover:text-primary/90"
-          >
-            {isDescriptionExpanded ? "See less" : "See more"}
-          </button>
-        </div>
+        <p className="mt-4 text-sm text-muted-foreground">
+          {artistData.description}
+        </p>
       </div>
 
       {/* Services Section */}

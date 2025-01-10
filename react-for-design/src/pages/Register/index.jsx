@@ -9,7 +9,7 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Navigate to home without validation
+    // Here you would handle form submission
     navigate("/home");
   };
 
@@ -110,6 +110,7 @@ const Register = () => {
                     type="text"
                     id="firstName"
                     className="w-full rounded-lg border border-input bg-background px-4 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    required
                   />
                 </div>
                 <div>
@@ -123,6 +124,7 @@ const Register = () => {
                     type="text"
                     id="lastName"
                     className="w-full rounded-lg border border-input bg-background px-4 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    required
                   />
                 </div>
               </div>
@@ -139,6 +141,7 @@ const Register = () => {
                   id="phone"
                   placeholder="+1 (555) 000-0000"
                   className="w-full rounded-lg border border-input bg-background px-4 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  required
                 />
               </div>
 
@@ -188,6 +191,7 @@ const Register = () => {
                       id="experience"
                       min="0"
                       className="w-full rounded-lg border border-input bg-background px-4 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      required
                     />
                   </div>
 

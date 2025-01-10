@@ -303,9 +303,6 @@ const SearchPage = () => {
     return true;
   });
 
-  // Check if any filter is active
-  const isAnyFilterActive = activeFilters.topRated || activeFilters.quickBook || activeFilters.services.length > 0;
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header with Search */}
@@ -400,7 +397,7 @@ const SearchPage = () => {
       </div>
 
       {/* Recent Searches */}
-      {!searchQuery && !isAnyFilterActive && (
+      {!searchQuery && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -434,7 +431,7 @@ const SearchPage = () => {
       )}
 
       {/* Search Results */}
-      {(searchQuery || isAnyFilterActive) && (
+      {searchQuery && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -442,12 +439,10 @@ const SearchPage = () => {
           className="p-6"
         >
           <p className="mb-6 text-sm text-muted-foreground">
-            {searchQuery ? (
-              <>Showing {filteredArtists.length} results for "{searchQuery}"</>
-            ) : (
-              <>Showing {filteredArtists.length} results</>
-            )}
-            {isAnyFilterActive && (
+            Showing {filteredArtists.length} results for "{searchQuery}"
+            {(activeFilters.topRated ||
+              activeFilters.quickBook ||
+              activeFilters.services.length > 0) && (
               <span className="block mt-1 text-xs">
                 Filtered by:{" "}
                 {[

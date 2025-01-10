@@ -16,6 +16,7 @@ import {
   Clock,
   MoreVertical,
   Map,
+  ChevronDown,
 } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Pagination } from "swiper/modules";
@@ -28,6 +29,16 @@ const styles = `
   .swiper-pagination {
     top: 83% !important;
     bottom: auto !important;
+  }
+  .swiper-pagination-bullet {
+    width: 8px !important;
+    height: 8px !important;
+    background: rgba(252, 228, 236, 0.6) !important;
+    opacity: 1 !important;
+  }
+  .swiper-pagination-bullet-active {
+    background: #FCE4EC !important;
+    transform: scale(1.5);
   }
 `;
 
@@ -162,8 +173,8 @@ const LocationModal = ({ isOpen, onClose }) => {
     if (searchQuery.trim()) {
       const newLocation = {
         id: savedLocations.length + 1,
-        name: searchQuery,
-        address: searchQuery, // In a real app, this would be properly formatted address
+        name: "New Location",
+        address: searchQuery,
       };
       setSavedLocations([...savedLocations, newLocation]);
       setSearchQuery("");
@@ -173,81 +184,114 @@ const LocationModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-background">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex flex-col bg-background/80 backdrop-blur-sm"
+    >
       {/* Header */}
-      <div className="flex items-center gap-4 p-4 border-b bg-background border-border/40">
-        <button onClick={onClose} className="p-2 rounded-full hover:bg-accent">
+      <div className="flex items-center gap-4 p-4 border-b bg-background/95 backdrop-blur-sm border-border/40">
+        <button
+          onClick={onClose}
+          className="p-2 transition-colors rounded-full hover:bg-accent"
+        >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="flex-1">
-          <h2 className="text-lg font-medium">Your Locations</h2>
-        </div>
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent">
-          <span className="text-xs font-medium">Bali</span>
+          <h2 className="text-lg font-medium">Select Location</h2>
+          <p className="text-sm text-muted-foreground">
+            Choose or add a new location
+          </p>
         </div>
       </div>
 
       {/* Search Input */}
-      <div className="p-4 border-b border-border/40">
-        <form onSubmit={handleAddLocation} className="relative">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Enter a new location..."
-            className="w-full px-4 py-3 pr-12 bg-accent/50 rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
-          />
-          <button
-            type="submit"
-            className="absolute p-2 -translate-y-1/2 rounded-full right-2 top-1/2 hover:bg-accent"
-          >
-            <Search className="w-5 h-5 text-primary" />
-          </button>
+      <div className="p-4 border-b border-border/40 bg-background/95 backdrop-blur-sm">
+        <form onSubmit={handleAddLocation} className="space-y-4">
+          <div className="flex items-center gap-3 p-3 transition-all border-2 rounded-xl bg-background border-primary/20">
+            <div className="p-2 rounded-full">
+              <Search className="w-5 h-5 text-primary" />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search location or enter address..."
+              className="flex-1 text-sm bg-transparent placeholder:text-muted-foreground focus:outline-none"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                type="button"
+                className="p-2 transition-colors rounded-full hover:bg-accent/50"
+              >
+                <X className="w-5 h-5 text-muted-foreground" />
+              </button>
+            )}
+          </div>
+          {searchQuery && (
+            <button
+              type="submit"
+              className="flex items-center w-full gap-2 px-4 py-3 text-sm font-medium transition-colors border rounded-xl bg-primary/10 text-primary border-primary/20 hover:bg-primary/20"
+            >
+              <MapPin className="w-4 h-4" />
+              Add "{searchQuery}" as a new location
+            </button>
+          )}
         </form>
       </div>
 
       {/* Saved Locations List */}
       <div className="flex-1 overflow-auto">
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-3">
           {savedLocations.map((location) => (
-            <div
+            <motion.div
               key={location.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               onClick={() => handleLocationSelect(location)}
-              className="flex items-start gap-4 p-4 cursor-pointer hover:bg-accent/50 rounded-2xl"
+              className="flex items-start gap-4 p-4 transition-all border cursor-pointer bg-background/95 backdrop-blur-sm border-border/40 rounded-xl hover:bg-accent/50"
             >
-              {location.isCurrent ? (
-                <div className="p-2 rounded-full bg-accent">
+              <div className="p-2 rounded-full bg-accent/50">
+                {location.isCurrent ? (
                   <Target className="w-5 h-5 text-primary" />
-                </div>
-              ) : (
-                <div className="p-2 rounded-full bg-accent">
+                ) : (
                   <MapPin className="w-5 h-5 text-primary" />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="font-medium text-foreground">
+                    {location.name}
+                  </h3>
+                  {location.isCurrent && (
+                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
+                      Current
+                    </span>
+                  )}
                 </div>
-              )}
-              <div className="flex-1">
-                <h3 className="mb-1 font-medium text-foreground">
-                  {location.name}
-                </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">
+                <p className="mt-1 text-sm truncate text-muted-foreground">
                   {location.address}
                 </p>
               </div>
-              <button className="p-2 rounded-full hover:bg-accent">
-                <MoreVertical className="w-5 h-5 text-muted-foreground" />
-              </button>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      {/* Bottom Action */}
-      <div className="p-4 border-t border-border/40">
-        <button className="flex items-center justify-center w-full gap-2 p-4 font-medium border bg-background border-border/40 rounded-xl text-foreground hover:bg-accent/50">
+      {/* Bottom Actions */}
+      <div className="p-4 space-y-3 border-t border-border/40 bg-background/95 backdrop-blur-sm">
+        <button className="flex items-center justify-center w-full gap-2 p-4 font-medium text-white transition-colors rounded-xl bg-primary hover:bg-primary/90">
+          <Target className="w-5 h-5" />
+          Use Current Location
+        </button>
+        <button className="flex items-center justify-center w-full gap-2 p-4 font-medium transition-colors border rounded-xl bg-background hover:bg-accent/50 border-border/40">
           <Map className="w-5 h-5" />
-          Choose from map
+          Choose from Map
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -283,12 +327,9 @@ const HomePage = () => {
           }}
           pagination={{
             clickable: true,
-            bulletClass:
-              "inline-block w-2 h-2 mx-1 rounded-full bg-white/50 cursor-pointer transition-all duration-300",
-            bulletActiveClass: "!bg-primary !opacity-100",
           }}
           loop={true}
-          className="absolute inset-0 w-full h-full"
+          className="h-full"
         >
           {beautyServices.map((service) => (
             <SwiperSlide key={service.id}>
@@ -298,21 +339,28 @@ const HomePage = () => {
                   alt={service.name}
                   className="object-cover w-full h-full"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/60" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
 
-        {/* Location Content */}
-        <div className="absolute top-0 left-0 right-0 z-10">
-          <div className="flex flex-col items-start w-full p-6">
+        <div className="absolute inset-0 z-10">
+          <div className="flex flex-col items-center w-full p-6">
             <button
               onClick={() => setIsLocationModalOpen(true)}
-              className="flex items-center px-6 py-3 space-x-2 text-sm font-medium transition-colors rounded-xl bg-background/90 backdrop-blur-sm hover:bg-background"
+              className="flex items-center px-5 py-1.5 space-x-2 text-sm transition-colors rounded-full bg-background/95 backdrop-blur-sm border-2 border-primary/20 hover:bg-accent/50"
             >
-              <MapPin className="w-4 h-4" />
-              <span>{userLocation || "Select Location"}</span>
+              <MapPin className="w-5 h-5 text-primary" />
+              <div className="flex flex-col items-start">
+                <span className="text-xs text-muted-foreground">
+                  Select your location
+                </span>
+                <span className="font-medium text-foreground">
+                  {userLocation}
+                </span>
+              </div>
+              <ChevronDown className="w-5 h-5 ml-1 text-muted-foreground" />
             </button>
           </div>
         </div>
@@ -328,11 +376,16 @@ const HomePage = () => {
         >
           <div
             onClick={() => navigate("/search")}
-            className="flex items-center p-4 shadow-lg cursor-pointer bg-background/95 backdrop-blur-sm rounded-2xl ring-1 ring-border/40"
+            className="flex items-center gap-3 p-4 transition-all border shadow-lg cursor-pointer bg-background/95 backdrop-blur-sm rounded-xl border-border/40 hover:bg-accent/50"
           >
-            <Search className="w-5 h-5 text-muted-foreground" />
-            <div className="flex-1 ml-3 text-muted-foreground">
-              Search services or artists...
+            <div className="p-2 rounded-full">
+              <Search className="w-5 h-5 text-primary" />
+            </div>
+            <div className="flex-1">
+              <span className="text-xs text-muted-foreground">Search for</span>
+              <p className="text-sm font-medium text-foreground">
+                Services or artists...
+              </p>
             </div>
           </div>
         </motion.div>

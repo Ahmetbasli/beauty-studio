@@ -16,6 +16,7 @@ import PortfolioDetail from "./pages/PortfolioDetail";
 import ArtistReviews from "./pages/ArtistReviews";
 import Payment from "./pages/Payment";
 import Layout from "./components/Layout";
+import BookingDetail from "./pages/BookingDetail";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/payment/:id" element={<Payment />} />
           <Route path="/services/:id" element={<ServiceDetail />} />
           <Route path="/bookings" element={<Bookings />} />
+          <Route path="/booking/:id" element={<BookingDetail />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/style-guide" element={<StyleGuide />} />
         </Routes>

@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { IoChevronBack } from "react-icons/io5";
-import { FaWallet, FaUniversity, FaCreditCard } from "react-icons/fa";
+import {
+  FaWallet,
+  FaUniversity,
+  FaCreditCard,
+  FaGoogleWallet,
+  FaMoneyBillWave,
+} from "react-icons/fa";
+import { SiVisa, SiMastercard } from "react-icons/si";
+import { BsBank, BsBank2 } from "react-icons/bs";
+import { Check, Calendar, Clock, MapPin } from "lucide-react";
 
 const paymentMethods = {
   eWallets: [
@@ -26,7 +35,110 @@ const paymentMethods = {
   ],
 };
 
-const PaymentInstructionsModal = ({ isOpen, onClose, selectedMethod }) => {
+const PaymentSuccessView = ({ navigate }) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.95 }}
+    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+  >
+    <div className="w-full max-w-md p-6 bg-white rounded-2xl">
+      <div className="flex flex-col items-center text-center">
+        {/* Success Animation */}
+        <div className="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-primary/10">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+          >
+            <Check className="w-8 h-8 text-primary" />
+          </motion.div>
+        </div>
+
+        <h2 className="mb-2 text-2xl font-semibold">Payment Successful!</h2>
+        <p className="mb-6 text-sm text-muted-foreground">
+          We're waiting for the artist to confirm your booking
+        </p>
+
+        {/* Status Badge */}
+        <div className="w-full p-3 mb-6 text-sm font-medium text-amber-700 bg-amber-50 rounded-lg">
+          <div className="flex items-center justify-center gap-2">
+            <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+            Artist has 15 minutes to respond
+          </div>
+        </div>
+
+        {/* Booking Details */}
+        <div className="w-full p-4 mb-6 space-y-3 border rounded-xl border-border/40 bg-accent/50">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm">
+              <Calendar className="w-4 h-4 text-primary" />
+              <span>Aug 15, 2024</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <Clock className="w-4 h-4 text-primary" />
+              <span>10:00 AM</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <MapPin className="w-4 h-4 text-primary" />
+            <span>Sarah Mitchell's Studio, Denpasar</span>
+          </div>
+        </div>
+
+        {/* What's Next Section */}
+        <div className="w-full p-4 mb-6 text-left border rounded-xl border-border/40">
+          <h3 className="mb-3 font-medium">What's next?</h3>
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2">
+              <div className="flex-shrink-0 w-5 h-5 p-1 mt-0.5 rounded-full bg-primary/10">
+                <div className="w-full h-full rounded-full bg-primary" />
+              </div>
+              The artist will confirm your booking within 15 minutes
+            </li>
+            <li className="flex items-start gap-2">
+              <div className="flex-shrink-0 w-5 h-5 p-1 mt-0.5 rounded-full bg-primary/10">
+                <div className="w-full h-full rounded-full bg-primary" />
+              </div>
+              If no response, booking will be automatically cancelled and
+              refunded
+            </li>
+            <li className="flex items-start gap-2">
+              <div className="flex-shrink-0 w-5 h-5 p-1 mt-0.5 rounded-full bg-primary/10">
+                <div className="w-full h-full rounded-full bg-primary" />
+              </div>
+              Once confirmed, you'll receive a notification and reminder 24h
+              before
+            </li>
+          </ul>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid w-full gap-3">
+          <button
+            onClick={() => navigate("/bookings")}
+            className="w-full py-3 font-medium text-white transition-colors rounded-xl bg-primary hover:bg-primary/90"
+          >
+            View My Bookings
+          </button>
+          <button
+            onClick={() => navigate("/home")}
+            className="w-full py-3 font-medium transition-colors rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent/50"
+          >
+            Back to Home
+          </button>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
+
+const PaymentInstructionsModal = ({
+  isOpen,
+  onClose,
+  selectedMethod,
+  onPaymentComplete,
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -54,12 +166,20 @@ const PaymentInstructionsModal = ({ isOpen, onClose, selectedMethod }) => {
             <li className="mb-2">Confirm and complete the payment</li>
           </ol>
         </div>
-        <button
-          onClick={onClose}
-          className="w-full py-3 font-medium text-white transition-colors rounded-xl bg-primary hover:bg-primary/90"
-        >
-          Close
-        </button>
+        <div className="grid gap-3">
+          <button
+            onClick={onPaymentComplete}
+            className="w-full py-3 font-medium text-white transition-colors rounded-xl bg-primary hover:bg-primary/90"
+          >
+            I've Completed the Payment
+          </button>
+          <button
+            onClick={onClose}
+            className="w-full py-3 font-medium transition-colors rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent/50"
+          >
+            Cancel
+          </button>
+        </div>
       </motion.div>
     </div>
   );
@@ -103,10 +223,16 @@ const Payment = () => {
   const { id } = useParams();
   const [showInstructions, setShowInstructions] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleMethodSelect = (method) => {
     setSelectedMethod(method);
     setShowInstructions(true);
+  };
+
+  const handlePaymentComplete = () => {
+    setShowInstructions(false);
+    setShowSuccess(true);
   };
 
   return (
@@ -176,7 +302,12 @@ const Payment = () => {
         isOpen={showInstructions}
         onClose={() => setShowInstructions(false)}
         selectedMethod={selectedMethod}
+        onPaymentComplete={handlePaymentComplete}
       />
+
+      <AnimatePresence>
+        {showSuccess && <PaymentSuccessView navigate={navigate} />}
+      </AnimatePresence>
     </div>
   );
 };

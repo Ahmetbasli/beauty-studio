@@ -1,166 +1,243 @@
-import React, { useState } from "react";
-import { Clock, MapPin, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { Calendar, Clock, MapPin, ChevronRight } from "lucide-react";
+import { useState } from "react";
 
-const Bookings = () => {
-  const [activeTab, setActiveTab] = useState("active");
+const mockBookings = [
+  {
+    id: 1,
+    artistId: "1",
+    artistName: "Sarah Mitchell",
+    service: "Hair Coloring",
+    date: "Aug 15, 2024",
+    time: "10:00 AM",
+    location: "Sarah Mitchell's Studio, Denpasar",
+    status: "pending",
+    price: "Rp 850.000",
+    image:
+      "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: 2,
+    artistId: "2",
+    artistName: "Emma Davis",
+    service: "Makeup",
+    date: "Aug 18, 2024",
+    time: "2:00 PM",
+    location: "Emma's Beauty Studio, Kuta",
+    status: "confirmed",
+    price: "Rp 650.000",
+    image:
+      "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: 3,
+    artistId: "3",
+    artistName: "Jessica Lee",
+    service: "Nail Art",
+    date: "Aug 20, 2024",
+    time: "11:30 AM",
+    location: "Nail Paradise, Seminyak",
+    status: "completed",
+    price: "Rp 450.000",
+    image:
+      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: 4,
+    artistId: "4",
+    artistName: "Linda Wang",
+    service: "Facial Treatment",
+    date: "Aug 5, 2024",
+    time: "3:00 PM",
+    location: "Beauty Spa, Kuta",
+    status: "cancelled",
+    price: "Rp 750.000",
+    image:
+      "https://images.unsplash.com/photo-1512756290469-ec264b7fbf87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: 5,
+    artistId: "2",
+    artistName: "Emma Davis",
+    service: "Hair Styling",
+    date: "Aug 1, 2024",
+    time: "11:00 AM",
+    location: "Emma's Beauty Studio, Kuta",
+    status: "completed",
+    price: "Rp 450.000",
+    image:
+      "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80",
+  },
+];
 
-  // Mock data for bookings
-  const activeBookings = [
-    {
-      id: 1,
-      serviceName: "Bridal Makeup",
-      artistName: "Sarah Mitchell",
-      date: "Tomorrow",
-      time: "10:00 AM",
-      location: "Denpasar, Bali",
-      price: "$199",
-      image: "https://i.pravatar.cc/150?img=1",
+const StatusBadge = ({ status }) => {
+  const statusStyles = {
+    pending: {
+      bg: "bg-amber-50",
+      text: "text-amber-700",
+      dot: "bg-amber-500",
     },
-    {
-      id: 2,
-      serviceName: "Hair Styling",
-      artistName: "Emma Wilson",
-      date: "Next Monday",
-      time: "2:30 PM",
-      location: "Kuta, Bali",
-      price: "$89",
-      image: "https://i.pravatar.cc/150?img=2",
+    confirmed: {
+      bg: "bg-green-50",
+      text: "text-green-700",
+      dot: "bg-green-500",
     },
-  ];
+    completed: {
+      bg: "bg-blue-50",
+      text: "text-blue-700",
+      dot: "bg-blue-500",
+    },
+    cancelled: {
+      bg: "bg-red-50",
+      text: "text-red-700",
+      dot: "bg-red-500",
+    },
+  };
 
-  const bookingHistory = [
-    {
-      id: 3,
-      serviceName: "Natural Makeup",
-      artistName: "Sarah Mitchell",
-      date: "Yesterday",
-      time: "11:30 AM",
-      location: "Denpasar, Bali",
-      price: "$69",
-      image: "https://i.pravatar.cc/150?img=1",
-      status: "Completed",
-    },
-    {
-      id: 4,
-      serviceName: "Party Makeup",
-      artistName: "Emma Wilson",
-      date: "Last Week",
-      time: "4:00 PM",
-      location: "Kuta, Bali",
-      price: "$89",
-      image: "https://i.pravatar.cc/150?img=2",
-      status: "Cancelled",
-    },
-  ];
-
-  const renderBookingCard = (booking, isHistory = false) => (
-    <div
-      key={booking.id}
-      className="p-4 mb-4 border rounded-2xl border-border/40"
-    >
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-12 h-12 overflow-hidden rounded-full">
-          <img
-            src={booking.image}
-            alt={booking.artistName}
-            className="object-cover w-full h-full"
-          />
-        </div>
-        <div className="flex-1">
-          <h3 className="font-medium">{booking.serviceName}</h3>
-          <p className="text-sm text-muted-foreground">
-            with {booking.artistName}
-          </p>
-        </div>
-        {isHistory && (
-          <span
-            className={`px-3 py-1 text-xs font-medium rounded-full ${
-              booking.status === "Completed"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}
-          >
-            {booking.status}
-          </span>
-        )}
-      </div>
-      <div className="flex items-center justify-between py-3 border-t border-border/40">
-        <div className="flex items-center text-sm text-muted-foreground">
-          <Clock className="w-4 h-4 mr-1" />
-          {booking.date} at {booking.time}
-        </div>
-        <span className="font-medium text-primary">{booking.price}</span>
-      </div>
-      <div className="flex items-center justify-between pt-3 border-t border-border/40">
-        <div className="flex items-center text-sm text-muted-foreground">
-          <MapPin className="w-4 h-4 mr-1" />
-          {booking.location}
-        </div>
-        {!isHistory && (
-          <button className="flex items-center text-sm font-medium text-primary">
-            View Details
-            <ChevronRight className="w-4 h-4 ml-1" />
-          </button>
-        )}
-      </div>
-    </div>
-  );
+  const style = statusStyles[status];
+  const label = status.charAt(0).toUpperCase() + status.slice(1);
 
   return (
-    <div className="min-h-screen p-4 bg-background">
-      {/* Header */}
-      <h1 className="mb-6 text-2xl font-semibold">Bookings</h1>
-
-      {/* Tabs */}
-      <div className="flex p-1 mb-6 border rounded-xl border-border/40">
-        <button
-          onClick={() => setActiveTab("active")}
-          className={`flex-1 py-2.5 text-sm font-medium rounded-lg ${
-            activeTab === "active"
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground"
+    <div
+      className={`px-3 py-1 text-xs font-medium rounded-lg ${style.bg} ${style.text}`}
+    >
+      <div className="flex items-center gap-1.5">
+        <div
+          className={`w-1.5 h-1.5 rounded-full ${style.dot} ${
+            status === "pending" ? "animate-pulse" : ""
           }`}
-        >
-          Active
-        </button>
-        <button
-          onClick={() => setActiveTab("history")}
-          className={`flex-1 py-2.5 text-sm font-medium rounded-lg ${
-            activeTab === "history"
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground"
-          }`}
-        >
-          History
-        </button>
-      </div>
-
-      {/* Booking Lists */}
-      <div>
-        {activeTab === "active" ? (
-          activeBookings.length > 0 ? (
-            activeBookings.map((booking) => renderBookingCard(booking))
-          ) : (
-            <div className="flex flex-col items-center justify-center p-8 text-center border rounded-2xl border-border/40">
-              <p className="mb-2 text-lg font-medium">No Active Bookings</p>
-              <p className="text-sm text-muted-foreground">
-                You don't have any upcoming appointments
-              </p>
-            </div>
-          )
-        ) : bookingHistory.length > 0 ? (
-          bookingHistory.map((booking) => renderBookingCard(booking, true))
-        ) : (
-          <div className="flex flex-col items-center justify-center p-8 text-center border rounded-2xl border-border/40">
-            <p className="mb-2 text-lg font-medium">No Booking History</p>
-            <p className="text-sm text-muted-foreground">
-              Your past appointments will appear here
-            </p>
-          </div>
-        )}
+        />
+        {label}
       </div>
     </div>
   );
 };
 
-export default Bookings;
+const BookingCard = ({ booking, onClick }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: 20 }}
+    className="p-4 space-y-4 transition-colors border rounded-xl border-border/40 hover:bg-accent/50"
+    onClick={onClick}
+  >
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <img
+          src={booking.image}
+          alt={booking.artistName}
+          className="object-cover w-12 h-12 rounded-full"
+        />
+        <div>
+          <h3 className="font-medium">{booking.artistName}</h3>
+          <p className="text-sm text-muted-foreground">{booking.service}</p>
+        </div>
+      </div>
+      <StatusBadge status={booking.status} />
+    </div>
+
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 text-sm">
+          <Calendar className="w-4 h-4 text-primary" />
+          <span>{booking.date}</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          <Clock className="w-4 h-4 text-primary" />
+          <span>{booking.time}</span>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 text-sm">
+        <MapPin className="w-4 h-4 text-primary" />
+        <span>{booking.location}</span>
+      </div>
+    </div>
+
+    <div className="flex items-center justify-between pt-2 border-t border-border/40">
+      <span className="font-medium">{booking.price}</span>
+      <ChevronRight className="w-5 h-5 text-muted-foreground" />
+    </div>
+  </motion.div>
+);
+
+const EmptyState = ({ message }) => (
+  <div className="flex flex-col items-center justify-center p-8 text-center border rounded-xl border-border/40">
+    <p className="mb-2 text-lg font-medium">No Bookings</p>
+    <p className="text-sm text-muted-foreground">{message}</p>
+  </div>
+);
+
+const BookingsPage = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("active");
+
+  const filteredBookings = mockBookings.filter((booking) => {
+    if (activeTab === "active") {
+      return ["pending", "confirmed"].includes(booking.status);
+    } else {
+      return ["completed", "cancelled"].includes(booking.status);
+    }
+  });
+
+  return (
+    <div className="flex flex-col min-h-screen bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-xl border-border/40">
+        <div className="p-4">
+          <h1 className="mb-4 text-2xl font-semibold">My Bookings</h1>
+
+          {/* Tabs */}
+          <div className="grid grid-cols-2 p-1 border rounded-xl border-border/40">
+            <button
+              onClick={() => setActiveTab("active")}
+              className={`py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                activeTab === "active"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Active
+            </button>
+            <button
+              onClick={() => setActiveTab("history")}
+              className={`py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                activeTab === "history"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              History
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Content */}
+      <div className="flex-1 ">
+        {/* Bookings List */}
+        <div className="p-4 space-y-4">
+          {filteredBookings.length > 0 ? (
+            filteredBookings.map((booking) => (
+              <BookingCard
+                key={booking.id}
+                booking={booking}
+                onClick={() => navigate(`/booking/${booking.id}`)}
+              />
+            ))
+          ) : (
+            <EmptyState
+              message={
+                activeTab === "active"
+                  ? "You don't have any upcoming appointments"
+                  : "Your past appointments will appear here"
+              }
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BookingsPage;
