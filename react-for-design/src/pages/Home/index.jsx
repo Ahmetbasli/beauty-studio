@@ -267,7 +267,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20 bg-background">
+    <div className="min-h-screen pb-20 bg-muted">
       {/* Location Section */}
       <div className="relative h-[300px]">
         {/* Add style tag for custom pagination */}
@@ -328,7 +328,7 @@ const HomePage = () => {
         >
           <div
             onClick={() => navigate("/search")}
-            className="flex items-center p-4 shadow-lg cursor-pointer bg-background rounded-2xl ring-1 ring-border/40"
+            className="flex items-center p-4 shadow-lg cursor-pointer bg-background/95 backdrop-blur-sm rounded-2xl ring-1 ring-border/40"
           >
             <Search className="w-5 h-5 text-muted-foreground" />
             <div className="flex-1 ml-3 text-muted-foreground">
@@ -349,9 +349,11 @@ const HomePage = () => {
         >
           <button
             onClick={() => navigate("/search?filter=quickBook")}
-            className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-primary/5"
+            className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-gradient-to-br from-[#FFF3E0] to-[#FFF8EC] hover:shadow-xl transition-all border border-primary/10"
           >
-            <Sparkles className="mb-3 h-7 w-7 text-primary" />
+            <div className="p-2 rounded-xl bg-primary/10 w-fit">
+              <Sparkles className="h-7 w-7 text-primary" />
+            </div>
             <h3 className="text-xl font-semibold text-foreground">
               Quick Book
             </h3>
@@ -359,9 +361,11 @@ const HomePage = () => {
           </button>
           <button
             onClick={() => navigate("/search?filter=topRated")}
-            className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-secondary/5"
+            className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-gradient-to-br from-[#FCE4EC] to-[#FFF0F5] hover:shadow-xl transition-all border border-secondary/10"
           >
-            <Star className="mb-3 h-7 w-7 text-secondary" />
+            <div className="p-2 rounded-xl bg-secondary/10 w-fit">
+              <Star className="h-7 w-7 text-secondary" />
+            </div>
             <h3 className="text-xl font-semibold text-foreground">Top Rated</h3>
             <p className="text-sm text-muted-foreground">Best of the best</p>
           </button>
@@ -391,7 +395,7 @@ const HomePage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
                 onClick={() => navigate(`/search?service=${service.name}`)}
-                className="p-4 transition-all border shadow-sm cursor-pointer bg-background border-border/40 rounded-2xl hover:shadow-md"
+                className="p-4 transition-all border shadow-sm cursor-pointer bg-background/95 backdrop-blur-sm border-border/40 rounded-2xl hover:shadow-md hover:bg-background"
               >
                 <div className="p-2 mb-3 rounded-full bg-primary/5 w-fit">
                   <div className="text-primary">{service.icon}</div>
@@ -432,7 +436,7 @@ const HomePage = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="flex items-center p-4 transition-all border shadow-sm cursor-pointer bg-background border-border/40 rounded-2xl hover:shadow-md"
+                className="flex items-center p-4 transition-all border shadow-sm cursor-pointer bg-background/95 backdrop-blur-sm border-border/40 rounded-2xl hover:shadow-md hover:bg-background"
                 onClick={() => handleArtistClick(artist.id)}
               >
                 <img

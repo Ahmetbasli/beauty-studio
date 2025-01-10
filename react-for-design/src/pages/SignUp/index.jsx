@@ -21,20 +21,20 @@ const SignUp = () => {
       </div>
 
       {/* Content */}
-      <div className="relative flex min-h-screen flex-col items-center px-4 py-16">
+      <div className="relative flex flex-col items-center min-h-screen px-4 py-16">
         {/* Back Button */}
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="absolute left-6 top-6 flex items-center gap-2 rounded-full border border-border/40 bg-background/95 px-4 py-2 text-sm font-medium text-muted-foreground backdrop-blur-sm transition-colors hover:bg-accent hover:text-foreground"
+          className="absolute flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors border rounded-full left-6 top-6 border-border/40 bg-background/95 text-muted-foreground backdrop-blur-sm hover:bg-accent hover:text-foreground"
           onClick={() => navigate("/")}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="w-4 h-4" />
           Back to role selection
         </motion.button>
 
         {/* Main Content */}
-        <div className="flex w-full flex-1 flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center flex-1 w-full">
           {/* Logo/Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -44,7 +44,7 @@ const SignUp = () => {
             <img
               src="/logo-bell.png"
               alt="Beauty Studio"
-              className="mx-auto mb-4 h-16 w-auto"
+              className="w-auto h-16 mx-auto mb-4"
             />
             <p className="text-2xl font-medium text-foreground">
               Create your account
@@ -56,9 +56,9 @@ const SignUp = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="mb-10 flex flex-col items-center"
+            className="flex flex-col items-center mb-10"
           >
-            <div className="inline-flex items-center justify-center rounded-full border border-primary/20 bg-primary/5 px-6 py-2">
+            <div className="inline-flex items-center justify-center px-6 py-2 border rounded-full border-primary/20 bg-primary/5">
               <span className="mr-2 font-medium text-primary">Step 2</span>
               <span className="text-primary/80">of 3</span>
               <span className="ml-3 text-sm text-muted-foreground">
@@ -72,19 +72,19 @@ const SignUp = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mb-10 flex items-center justify-center gap-3"
+            className="flex items-center justify-center gap-3 mb-10"
           >
-            <div className="rounded-full bg-primary/10 p-2">
+            <div className="p-2 rounded-full bg-primary/10">
               {selectedRole === "artist" ? (
-                <Palette className="h-5 w-5 text-primary" />
+                <Palette className="w-5 h-5 text-primary" />
               ) : (
-                <Sparkles className="h-5 w-5 text-primary" />
+                <Sparkles className="w-5 h-5 text-primary" />
               )}
             </div>
             <span className="text-sm text-muted-foreground">
               You are registering as a{" "}
               <span className="font-medium text-foreground">
-                {selectedRole === "artist" ? "Beauty Artist" : "Customer"}
+                {selectedRole === "artist" ? "Beauty Artist" : "Member"}
               </span>
             </span>
           </motion.div>
@@ -98,9 +98,9 @@ const SignUp = () => {
           >
             <button
               onClick={handleGoogleSignUp}
-              className="flex w-full items-center justify-center gap-3 rounded-xl border border-input bg-card px-8 py-4 text-base font-medium text-foreground shadow-lg transition-all hover:bg-accent hover:shadow-xl"
+              className="flex items-center justify-center w-full gap-3 px-8 py-4 text-base font-medium transition-all border shadow-lg rounded-xl border-input bg-card text-foreground hover:bg-accent hover:shadow-xl"
             >
-              <svg className="h-6 w-6" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" viewBox="0 0 24 24">
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                   fill="#4285F4"
@@ -127,7 +127,7 @@ const SignUp = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="mt-8 text-center text-sm text-muted-foreground"
+            className="mt-8 text-sm text-center text-muted-foreground"
           >
             Already have an account?{" "}
             <button

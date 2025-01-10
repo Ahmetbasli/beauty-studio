@@ -9,6 +9,12 @@ import Register from "./pages/Register";
 import Bookings from "./pages/Bookings";
 import StyleGuide from "./pages/StyleGuide";
 import SearchPage from "./pages/Search";
+import ServiceDetail from "./pages/ServiceDetail";
+import ArtistServices from "./pages/ArtistServices";
+import ArtistPortfolio from "./pages/ArtistPortfolio";
+import PortfolioDetail from "./pages/PortfolioDetail";
+import ArtistReviews from "./pages/ArtistReviews";
+import Payment from "./pages/Payment";
 import Layout from "./components/Layout";
 
 function App() {
@@ -22,6 +28,15 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/register" element={<Register />} />
           <Route path="/artist/:id" element={<ArtistDetailPage />} />
+          <Route path="/artist/:id/services" element={<ArtistServices />} />
+          <Route path="/artist/:id/portfolio" element={<ArtistPortfolio />} />
+          <Route
+            path="/artist/:id/portfolio/:imageIndex"
+            element={<PortfolioDetail />}
+          />
+          <Route path="/artist/:id/reviews" element={<ArtistReviews />} />
+          <Route path="/payment/:id" element={<Payment />} />
+          <Route path="/services/:id" element={<ServiceDetail />} />
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/style-guide" element={<StyleGuide />} />

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Sparkles, Palette } from "lucide-react";
+import { Sparkles, Palette, Brush, Crown } from "lucide-react";
 
 const RoleSelection = () => {
   const navigate = useNavigate();
@@ -59,33 +59,33 @@ const RoleSelection = () => {
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.1 }}
             onClick={() => handleRoleSelect("artist")}
-            className="group flex w-1/2 flex-col items-center rounded-2xl bg-card p-6 text-center shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+            className="flex flex-col items-center w-full p-6 transition-all border shadow-sm bg-background border-border/40 rounded-2xl hover:shadow-md"
           >
-            <div className="mb-4 rounded-full bg-primary/10 p-6">
-              <Palette className="h-14 w-14 text-primary" />
+            <div className="p-3 mb-4 rounded-full bg-primary/5">
+              <Brush className="w-8 h-8 text-primary" />
             </div>
             <h2 className="mb-2 text-2xl font-bold">Beauty Artist</h2>
-            <p className="text-base font-medium text-muted-foreground">
-              I want to provide beauty services
+            <p className="text-sm text-center text-muted-foreground">
+              Showcase your work and grow your client base
             </p>
           </motion.button>
 
-          {/* Customer Button */}
+          {/* Member Button */}
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            onClick={() => handleRoleSelect("customer")}
-            className="group flex w-1/2 flex-col items-center rounded-2xl bg-card p-6 text-center shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+            transition={{ delay: 0.2 }}
+            onClick={() => handleRoleSelect("member")}
+            className="flex flex-col items-center w-full p-6 transition-all border shadow-sm bg-background border-border/40 rounded-2xl hover:shadow-md"
           >
-            <div className="mb-4 rounded-full bg-primary/10 p-6">
-              <Sparkles className="h-14 w-14 text-primary" />
+            <div className="p-3 mb-4 rounded-full bg-secondary/5">
+              <Crown className="w-8 h-8 text-secondary" />
             </div>
-            <h2 className="mb-2 text-2xl font-bold">Customer</h2>
-            <p className="text-base font-medium text-muted-foreground">
-              I want to book beauty services
+            <h2 className="mb-2 text-2xl font-bold">Member</h2>
+            <p className="text-sm text-center text-muted-foreground">
+              Book beauty services from top artists
             </p>
           </motion.button>
         </div>

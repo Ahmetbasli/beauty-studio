@@ -1,396 +1,475 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
+  ArrowLeft,
   Star,
   MapPin,
+  Share2,
+  Heart,
+  MessageCircle,
   Clock,
   Calendar,
-  ChevronLeft,
   ChevronRight,
-  ArrowLeft,
-  Check,
-  AlertCircle,
+  Image as ImageIcon,
+  CheckCircle2,
+  X,
+  ChevronDown,
 } from "lucide-react";
-import {
-  generateAvailableTimeSlots,
-  mockWorkingHours,
-  mockExistingBookings,
-} from "../../utils/scheduleUtils";
 
-// Mock artist data
+// Mock data for the artist
 const artistData = {
   id: 1,
   name: "Sarah Mitchell",
   specialty: "Makeup Artist",
   rating: 4.9,
-  reviews: 127,
-  experience: "5+ years",
-  description:
-    "Professional makeup artist specializing in bridal and special occasion makeup. Known for creating flawless, long-lasting looks tailored to each client's unique style.",
-  image: "https://i.pravatar.cc/400?img=1",
+  reviewCount: 127,
   location: "Denpasar, Bali",
   distance: "2.3 km away",
-  badges: ["Celebrity Choice", "Award Winner"],
+  image: "https://i.pravatar.cc/300?img=1",
+  verified: true,
+  description:
+    "Professional makeup artist with 8+ years of experience specializing in bridal, editorial, and natural makeup looks. Featured in Vogue and Elle magazines. My passion for makeup artistry began during my time at the London College of Fashion, where I trained under industry veterans. I've since worked with countless brides, models, and celebrities, creating looks that enhance natural beauty while ensuring long-lasting results. My expertise includes airbrush makeup, traditional application, and special occasion styling. I stay current with the latest trends and techniques through regular masterclasses and workshops. My work has been featured in multiple wedding magazines, and I've been recognized as one of Bali's top bridal makeup artists. I use only premium, cruelty-free products and specialize in creating looks that photograph beautifully and last throughout any event.",
   services: [
     {
       id: 1,
       name: "Bridal Makeup",
       duration: "120 min",
       price: "$199",
+      image:
+        "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=800&auto=format&fit=crop",
     },
     {
       id: 2,
-      name: "Party Makeup",
+      name: "Natural Makeup",
       duration: "60 min",
       price: "$89",
+      image:
+        "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=800&auto=format&fit=crop",
     },
     {
       id: 3,
-      name: "Natural Makeup",
-      duration: "45 min",
-      price: "$69",
+      name: "Party Makeup",
+      duration: "90 min",
+      price: "$129",
+      image:
+        "https://images.unsplash.com/photo-1526045478516-99145907023c?q=80&w=800&auto=format&fit=crop",
     },
   ],
+  portfolio: [
+    "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1526045478516-99145907023c?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1515688594390-b649af70d282?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1522337094846-8a818192de1f?q=80&w=800&auto=format&fit=crop",
+  ],
+  reviewItems: [
+    {
+      id: 1,
+      user: {
+        name: "Emma Thompson",
+        image: "https://i.pravatar.cc/150?img=5",
+      },
+      rating: 5,
+      date: "2 days ago",
+      content:
+        "Sarah did an amazing job with my bridal makeup! She understood exactly what I wanted and made me feel so beautiful on my special day. Highly recommend her services!",
+    },
+    {
+      id: 2,
+      user: {
+        name: "Sophie Chen",
+        image: "https://i.pravatar.cc/150?img=9",
+      },
+      rating: 5,
+      date: "1 week ago",
+      content:
+        "Professional, punctual, and incredibly talented! The makeup lasted all day and looked perfect in photos. Thank you Sarah!",
+    },
+  ],
+  availability: {
+    today: ["10:00 AM", "2:30 PM", "4:00 PM"],
+    tomorrow: ["9:00 AM", "11:30 AM", "3:00 PM", "5:30 PM"],
+  },
 };
 
-const ArtistDetail = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
+const BookingModal = ({
+  isOpen,
+  onClose,
+  artistData,
+  navigate,
+  id,
+  selectedService,
+}) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedService, setSelectedService] = useState(null);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedTime, setSelectedTime] = useState("10:00");
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  // Generate available time slots based on selected date and service
-  const availableTimeSlots = useMemo(() => {
-    if (!selectedService) return [];
-
-    const dayOfWeek = selectedDate.getDay().toString();
-    const workingHours = mockWorkingHours[dayOfWeek];
-
-    return generateAvailableTimeSlots(
-      selectedDate,
-      workingHours,
-      parseInt(selectedService.duration),
-      mockExistingBookings
-    );
-  }, [selectedDate, selectedService]);
-
-  const handleDateSelect = (date) => {
-    setSelectedDate(date);
-    setSelectedTimeSlot(null);
-  };
-
-  const handleServiceSelect = (service) => {
-    setSelectedService(service);
-    setSelectedTimeSlot(null);
-  };
-
-  const handleTimeSelect = (slot) => {
-    if (slot.status === "available") {
-      setSelectedTimeSlot(slot);
-      setShowConfirmation(true);
+  const handleConfirm = () => {
+    if (selectedTime && selectedService) {
+      onClose();
+      navigate(`/payment/${id}`);
     }
   };
 
-  const formatDate = (date) => {
-    return new Intl.DateTimeFormat("en-US", {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-    }).format(date);
-  };
-
-  const formatTime = (date) => {
-    return new Intl.DateTimeFormat("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    }).format(date);
-  };
-
-  const isToday = (date) => {
-    const today = new Date();
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    );
-  };
-
-  // Generate next 7 days
-  const nextDays = useMemo(() => {
-    const days = [];
-    const today = new Date();
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      days.push(date);
-    }
-    return days;
-  }, []);
+  if (!isOpen) return null;
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <div className="relative h-[40vh] overflow-hidden">
-        <div
-          className="absolute inset-0 bg-center bg-cover"
-          style={{
-            backgroundImage: `url(${artistData.image})`,
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/95" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="w-full max-w-md p-6 mx-4 bg-white rounded-2xl"
+      >
+        {/* Modal Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-semibold">Book Appointment</h2>
+          <button
+            onClick={onClose}
+            className="p-2 transition-colors rounded-full hover:bg-accent/50"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Selected Service */}
+        <div className="p-4 mb-6 border rounded-xl border-border/40 bg-accent/50">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-medium">{selectedService?.name}</h3>
+            <span className="font-medium text-primary">
+              {selectedService?.price}
+            </span>
+          </div>
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Clock className="w-4 h-4 mr-1" />
+            {selectedService?.duration}
+          </div>
+        </div>
+
+        {/* Date Selection */}
+        <div className="mb-6">
+          <label className="block mb-2 text-sm font-medium">Select Date</label>
+          <button className="flex items-center justify-between w-full px-4 py-3 text-left border rounded-xl border-border/40 hover:bg-accent/50">
+            <span>{selectedDate.toLocaleDateString()}</span>
+            <ChevronDown className="w-4 h-4 text-muted-foreground" />
+          </button>
+        </div>
+
+        {/* Time Slots */}
+        <div className="mb-6">
+          <label className="block mb-2 text-sm font-medium">
+            Available Times
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            {artistData.availability.today.map((time, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedTime(time)}
+                className={`px-4 py-2 text-sm font-medium transition-colors border rounded-lg ${
+                  selectedTime === time
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border/40 hover:bg-accent/50"
+                }`}
+              >
+                {time}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Booking Button */}
         <button
-          onClick={() => navigate(-1)}
-          className="absolute p-2 rounded-full top-4 left-4 bg-background/80 backdrop-blur-sm"
+          onClick={handleConfirm}
+          disabled={!selectedTime || !selectedService}
+          className="w-full py-4 font-medium text-white transition-colors rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <ArrowLeft className="w-6 h-6" />
+          Book Now
         </button>
+      </motion.div>
+    </div>
+  );
+};
+
+const ArtistDetailPage = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [isLiked, setIsLiked] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
+  const handleBooking = (bookingDetails) => {
+    console.log("Booking confirmed:", bookingDetails);
+    // Handle booking confirmation
+  };
+
+  return (
+    <div className="min-h-screen bg-[#FAFAFA]">
+      {/* Header Image Section */}
+      <div className="relative h-[300px]">
+        <img
+          src={artistData.image}
+          alt={artistData.name}
+          className="object-cover w-full h-full"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
+
+        {/* Header Actions */}
+        <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4">
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={() => navigate(-1)}
+            className="p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </motion.button>
+          <div className="flex gap-2">
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              className="p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
+            >
+              <Share2 className="w-5 h-5" />
+            </motion.button>
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              onClick={() => setIsLiked(!isLiked)}
+              className="p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
+            >
+              <Heart
+                className={`w-5 h-5 ${
+                  isLiked ? "fill-red-500 text-red-500" : ""
+                }`}
+              />
+            </motion.button>
+          </div>
+        </div>
       </div>
 
-      {/* Content Section */}
-      <div className="relative px-4 -mt-20">
-        <div className="mb-6">
-          <h1 className="mb-2 text-2xl font-semibold text-foreground">
-            {artistData.name}
-          </h1>
-          <div className="flex items-center gap-2 mb-3 text-muted-foreground">
-            <MapPin className="w-4 h-4" />
-            <span className="text-sm">{artistData.location}</span>
-            <span className="text-sm">•</span>
-            <span className="text-sm">{artistData.distance}</span>
+      {/* Artist Info Section */}
+      <div className="px-4 py-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-semibold">{artistData.name}</h1>
+              {artistData.verified && (
+                <div className="p-0.5 rounded-full bg-primary">
+                  <CheckCircle2 className="w-4 h-4 text-white" />
+                </div>
+              )}
+            </div>
+            <p className="text-muted-foreground">{artistData.specialty}</p>
           </div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex flex-col items-end">
             <div className="flex items-center">
               <Star className="w-4 h-4 fill-primary text-primary" />
               <span className="ml-1 font-medium">{artistData.rating}</span>
             </div>
             <span className="text-sm text-muted-foreground">
-              ({artistData.reviews} reviews)
+              {artistData.reviewCount} reviews
             </span>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {artistData.badges.map((badge, index) => (
-              <span
-                key={index}
-                className="px-3 py-1 text-sm font-medium rounded-full bg-primary/10 text-primary"
-              >
-                {badge}
-              </span>
-            ))}
+        </div>
+
+        <div className="flex items-center gap-4 mt-4">
+          <div className="flex items-center text-sm text-muted-foreground">
+            <MapPin className="w-4 h-4 mr-1" />
+            {artistData.location}
+          </div>
+          <div className="text-sm text-muted-foreground">
+            {artistData.distance}
           </div>
         </div>
 
-        {/* Services */}
-        <section className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-medium">Services</h2>
-            <div className="text-sm text-muted-foreground">
-              Select a service to view availability
-            </div>
-          </div>
-          <div className="grid gap-3">
-            {artistData.services.map((service) => (
-              <div
-                key={service.id}
-                onClick={() => handleServiceSelect(service)}
-                className={`p-4 border rounded-2xl cursor-pointer transition-all ${
-                  selectedService?.id === service.id
-                    ? "border-primary bg-primary/5"
-                    : "border-border/40 hover:bg-accent/50"
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-medium">{service.name}</h3>
-                  <span className="font-medium text-primary">
-                    {service.price}
-                  </span>
-                </div>
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <Clock className="w-4 h-4 mr-1" />
-                  {service.duration}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {selectedService && (
-          <>
-            {/* Calendar */}
-            <section className="mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-medium">Select Date</h2>
-                <div className="text-sm text-primary">
-                  {formatDate(selectedDate)}
-                </div>
-              </div>
-              <div className="flex gap-2 pb-2 mb-4 overflow-x-auto scrollbar-hide">
-                {nextDays.map((date, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleDateSelect(date)}
-                    className={`flex-shrink-0 p-3 rounded-xl border transition-all ${
-                      selectedDate.getDate() === date.getDate()
-                        ? "border-primary bg-primary/5"
-                        : "border-border/40"
-                    }`}
-                  >
-                    <div className="text-sm font-medium">
-                      {isToday(date) ? "Today" : formatDate(date)}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            {/* Time Slots */}
-            <section className="mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-medium">Available Times</h2>
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <Clock className="w-4 h-4 mr-1" />
-                  {selectedService.duration} per session
-                </div>
-              </div>
-              {availableTimeSlots.length > 0 ? (
-                <div className="grid grid-cols-3 gap-2">
-                  {availableTimeSlots.map((slot) => (
-                    <button
-                      key={slot.id}
-                      onClick={() => handleTimeSelect(slot)}
-                      className={`p-3 rounded-xl border text-sm font-medium transition-all ${
-                        selectedTimeSlot?.id === slot.id
-                          ? "border-primary bg-primary/5 text-primary"
-                          : "border-border/40 hover:bg-accent/50"
-                      }`}
-                    >
-                      {formatTime(slot.startTime)}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center p-8 border border-border/40 rounded-2xl">
-                  <AlertCircle className="w-8 h-8 mb-2 text-muted-foreground" />
-                  <p className="text-center text-muted-foreground">
-                    No available slots for this date.
-                    <br />
-                    Please try another day.
-                  </p>
-                </div>
-              )}
-            </section>
-
-            {/* Working Hours Info */}
-            <section className="mb-6">
-              <div className="p-4 rounded-2xl bg-accent/50">
-                <h3 className="mb-2 font-medium">Working Hours</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-                  <div>
-                    <p>Monday - Friday</p>
-                    <p className="font-medium text-foreground">
-                      9:00 AM - 7:00 PM
-                    </p>
-                  </div>
-                  <div>
-                    <p>Saturday - Sunday</p>
-                    <p className="font-medium text-foreground">
-                      10:00 AM - 6:00 PM
-                    </p>
-                  </div>
-                  <div className="col-span-2">
-                    <p>Break Time</p>
-                    <p className="font-medium text-foreground">
-                      1:00 PM - 2:00 PM
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </>
-        )}
-
-        {/* About */}
-        <section className="mb-6">
-          <h2 className="mb-4 text-lg font-medium">About</h2>
-          <p className="text-muted-foreground">{artistData.description}</p>
-        </section>
-      </div>
-
-      {/* Booking Button */}
-      {selectedService && selectedTimeSlot && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 border-t bg-background border-border/40">
-          <button
-            onClick={() => setShowConfirmation(true)}
-            className="w-full py-4 font-medium bg-primary text-primary-foreground rounded-xl"
+        <div className="relative mt-4">
+          <p
+            className={`text-sm text-muted-foreground ${
+              !isDescriptionExpanded && "line-clamp-2"
+            }`}
           >
-            Book for {formatTime(selectedTimeSlot.startTime)}
+            {artistData.description}
+          </p>
+          <button
+            onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+            className="mt-1 text-sm font-medium text-primary hover:text-primary/90"
+          >
+            {isDescriptionExpanded ? "See less" : "See more"}
           </button>
         </div>
-      )}
+      </div>
 
-      {/* Confirmation Modal */}
-      {showConfirmation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="w-full max-w-sm p-6 mx-4 bg-background rounded-3xl"
+      {/* Services Section */}
+      <div className="px-4 mt-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold">Services</h2>
+          <button
+            onClick={() => navigate(`/artist/${id}/services`)}
+            className="flex items-center text-sm text-primary"
           >
-            <div className="flex justify-center mb-6">
-              <div className="p-4 rounded-full bg-primary/10">
-                <Check className="w-8 h-8 text-primary" />
-              </div>
-            </div>
-            <div className="mb-6 text-center">
-              <h2 className="mb-2 text-xl font-semibold">Confirm Booking</h2>
-              <p className="text-muted-foreground">
-                {selectedService.name} with {artistData.name}
-              </p>
-              <p className="mt-1 font-medium text-foreground">
-                {formatDate(selectedDate)} at{" "}
-                {formatTime(selectedTimeSlot.startTime)}
-              </p>
-              <div className="p-3 mt-4 rounded-xl bg-accent/50">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Duration</span>
-                  <span className="font-medium">
-                    {selectedService.duration}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between mt-2 text-sm">
-                  <span className="text-muted-foreground">Price</span>
-                  <span className="font-medium text-primary">
-                    {selectedService.price}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <button
-                onClick={() => navigate("/home")}
-                className="w-full py-3 font-medium bg-primary text-primary-foreground rounded-xl"
-              >
-                Confirm Booking
-              </button>
-              <button
-                onClick={() => setShowConfirmation(false)}
-                className="w-full py-3 font-medium bg-accent text-foreground rounded-xl"
-              >
-                Change Time
-              </button>
-            </div>
-          </motion.div>
+            See all
+            <ChevronRight className="w-4 h-4 ml-1" />
+          </button>
         </div>
-      )}
+        <div className="space-y-4">
+          {artistData.services.map((service) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex gap-4 p-4 transition-all border shadow-sm bg-white border-border/40 rounded-2xl hover:shadow-md group"
+            >
+              <div
+                className="flex flex-1 gap-4 cursor-pointer"
+                onClick={() => navigate(`/services/${service.id}`)}
+              >
+                <img
+                  src={service.image}
+                  alt={service.name}
+                  className="object-cover w-20 h-20 rounded-xl"
+                />
+                <div className="flex-1">
+                  <h3 className="font-medium">{service.name}</h3>
+                  <div className="flex items-center mt-1 text-sm text-muted-foreground">
+                    <Clock className="w-4 h-4 mr-1" />
+                    {service.duration}
+                  </div>
+                  <p className="mt-2 text-sm font-medium text-primary">
+                    {service.price}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-end">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedService(service);
+                    setShowBookingModal(true);
+                  }}
+                  className="px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-primary hover:bg-primary/90"
+                >
+                  Book Now
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Portfolio Section */}
+      <div className="px-4 mt-8 mb-20">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold">Portfolio</h2>
+          <button
+            onClick={() => navigate(`/artist/${id}/portfolio`)}
+            className="flex items-center text-sm text-primary"
+          >
+            See all
+            <ChevronRight className="w-4 h-4 ml-1" />
+          </button>
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          {artistData.portfolio.slice(0, 6).map((image, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.1 }}
+              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer"
+              onClick={() => navigate(`/artist/${id}/portfolio/${index}`)}
+            >
+              <img
+                src={image}
+                alt={`Portfolio ${index + 1}`}
+                className="object-cover w-full h-full transition-transform group-hover:scale-110"
+              />
+              <div className="absolute inset-0 transition-opacity opacity-0 bg-black/40 group-hover:opacity-100" />
+              <ImageIcon className="absolute w-6 h-6 transition-opacity -translate-x-1/2 -translate-y-1/2 opacity-0 text-white/90 top-1/2 left-1/2 group-hover:opacity-100" />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="px-4 mt-8 mb-20">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold">Reviews</h2>
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Star className="w-4 h-4 fill-primary text-primary" />
+              <span className="ml-1 font-medium">{artistData.rating}</span>
+              <span className="ml-1">({artistData.reviewCount} reviews)</span>
+            </div>
+          </div>
+          <button
+            onClick={() => navigate(`/artist/${id}/reviews`)}
+            className="flex items-center text-sm text-primary"
+          >
+            See all
+            <ChevronRight className="w-4 h-4 ml-1" />
+          </button>
+        </div>
+        <div className="space-y-4">
+          {Array.isArray(artistData.reviewItems) &&
+            artistData.reviewItems.slice(0, 2).map((review) => (
+              <motion.div
+                key={review.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 border rounded-2xl border-border/40"
+              >
+                <div className="flex items-start gap-3 mb-3">
+                  <img
+                    src={review.user.image}
+                    alt={review.user.name}
+                    className="w-10 h-10 rounded-full"
+                  />
+                  <div>
+                    <h3 className="font-medium">{review.user.name}</h3>
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {Array.from({ length: review.rating }).map(
+                          (_, index) => (
+                            <Star
+                              key={index}
+                              className="w-3 h-3 fill-primary text-primary"
+                            />
+                          )
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {review.date}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {review.content}
+                </p>
+              </motion.div>
+            ))}
+        </div>
+      </div>
+
+      {/* Booking Modal */}
+      <AnimatePresence>
+        {showBookingModal && (
+          <BookingModal
+            isOpen={showBookingModal}
+            onClose={() => setShowBookingModal(false)}
+            artistData={artistData}
+            navigate={navigate}
+            id={id}
+            selectedService={selectedService}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-export default ArtistDetail;
+export default ArtistDetailPage;
