@@ -27,7 +27,7 @@ const ArtistCard = ({ artist, navigate }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    className="p-4 transition-all border shadow-sm bg-white border-border/40 rounded-2xl hover:shadow-md"
+    className="p-4 transition-all bg-white border shadow-sm border-border/40 rounded-2xl hover:shadow-md"
     onClick={() => navigate(`/artist/${artist.id}`)}
   >
     <div className="flex gap-4">
@@ -100,7 +100,7 @@ const ServiceModal = ({ isOpen, onClose, onSelect, activeServices }) => {
       className="fixed inset-x-0 bottom-0 z-50 p-8 bg-background/95 backdrop-blur-sm border-t border-border/40 rounded-t-[32px] shadow-2xl"
     >
       <div className="mb-6">
-        <h3 className="text-2xl font-medium text-foreground mb-2">
+        <h3 className="mb-2 text-2xl font-medium text-foreground">
           Select Services
         </h3>
         <p className="text-sm text-muted-foreground">
@@ -139,7 +139,7 @@ const ServiceModal = ({ isOpen, onClose, onSelect, activeServices }) => {
             </div>
             <div className="flex flex-col">
               <span className="font-medium">{service.name}</span>
-              <span className="text-xs text-muted-foreground mt-1">
+              <span className="mt-1 text-xs text-muted-foreground">
                 {service.name === "Makeup" && "Bridal, Party & Natural"}
                 {service.name === "Hair" && "Styling, Cut & Color"}
                 {service.name === "Nails" && "Manicure & Art Design"}
@@ -153,14 +153,14 @@ const ServiceModal = ({ isOpen, onClose, onSelect, activeServices }) => {
         whileTap={{ scale: 0.98 }}
         whileHover={{ scale: 1.02 }}
         onClick={handleApply}
-        className="w-full p-5 font-medium text-center transition-all rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl text-base"
+        className="w-full p-5 text-base font-medium text-center transition-all shadow-lg rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl"
       >
         Apply Filters
       </motion.button>
       <motion.button
         whileTap={{ scale: 0.98 }}
         onClick={onClose}
-        className="w-full mt-3 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+        className="w-full mt-3 text-sm font-medium transition-colors text-muted-foreground hover:text-foreground"
       >
         Cancel
       </motion.button>
@@ -279,7 +279,7 @@ const SearchPage = () => {
       verified: true,
       quickBook: true,
       services: ["Makeup", "Hair"],
-    }
+    },
   ];
 
   // Filter artists based on search query and active filters
@@ -320,11 +320,11 @@ const SearchPage = () => {
     <div className="min-h-screen bg-background">
       {/* Header with Search */}
       <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm">
-        <div className="flex items-center gap-4 p-6 border-b border-border/40">
+        <div className="flex items-center gap-4 p-6 pb-2 order-b p border-border/40">
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate(-1)}
-            className="p-2 rounded-xl hover:bg-accent transition-colors"
+            className="p-2 transition-colors rounded-xl hover:bg-accent"
           >
             <ArrowLeft className="w-5 h-5" />
           </motion.button>
@@ -340,7 +340,7 @@ const SearchPage = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search services or artists..."
-                  className="w-full px-5 py-3 pr-12 bg-background border border-border/40 rounded-2xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                  className="w-full px-5 py-3 pr-12 transition-all border shadow-sm bg-background border-border/40 rounded-2xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
                   autoFocus
                 />
                 {searchQuery && (
@@ -350,7 +350,7 @@ const SearchPage = () => {
                     exit={{ opacity: 0, scale: 0.8 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setSearchQuery("")}
-                    className="absolute p-2 -translate-y-1/2 rounded-xl right-2 top-1/2 hover:bg-accent/50 transition-colors"
+                    className="absolute p-2 transition-colors -translate-y-1/2 rounded-xl right-2 top-1/2 hover:bg-accent/50"
                   >
                     <X className="w-5 h-5 text-muted-foreground" />
                   </motion.button>
@@ -365,45 +365,45 @@ const SearchPage = () => {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="p-4 border-b border-border/40 overflow-x-auto"
+          className="p-4 overflow-x-auto border-b border-border/40"
         >
-          <div className="flex gap-3 px-2">
+          <div className="flex gap-2 px-2">
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => toggleFilter("quickBook")}
-              className={`flex-shrink-0 flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all rounded-xl shadow-sm ${
+              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all rounded-lg shadow-sm ${
                 activeFilters.quickBook
                   ? "bg-accent/90 text-foreground border border-border/40"
                   : "bg-accent/20 hover:bg-accent/30 text-muted-foreground border border-border/40"
               }`}
             >
-              <Clock className={`w-4 h-4`} />
+              <Clock className="w-3.5 h-3.5" />
               Quick Book
             </motion.button>
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => toggleFilter("topRated")}
-              className={`flex-shrink-0 flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all rounded-xl shadow-sm ${
+              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all rounded-lg shadow-sm ${
                 activeFilters.topRated
                   ? "bg-accent/90 text-foreground border border-border/40"
                   : "bg-accent/20 hover:bg-accent/30 text-muted-foreground border border-border/40"
               }`}
             >
-              <Star className={`w-4 h-4`} />
+              <Star className="w-3.5 h-3.5" />
               Top Rated
             </motion.button>
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsServiceModalOpen(true)}
-              className={`flex-shrink-0 flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all rounded-xl shadow-sm ${
+              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-all rounded-lg shadow-sm ${
                 activeFilters.services.length > 0
                   ? "bg-accent/90 text-foreground border border-border/40"
                   : "bg-accent/20 hover:bg-accent/30 text-muted-foreground border border-border/40"
               }`}
             >
-              <Brush className={`w-4 h-4`} />
+              <Brush className="w-3.5 h-3.5" />
               Services
-              <ChevronDown className={`w-4 h-4 ml-1`} />
+              <ChevronDown className="w-3.5 h-3.5 ml-0.5" />
             </motion.button>
           </div>
         </motion.div>
@@ -432,7 +432,7 @@ const SearchPage = () => {
                   onClick={() => setSearchQuery(search)}
                   className="flex items-center w-full gap-4 p-4 transition-all border rounded-2xl hover:bg-accent/30 border-border/40 group"
                 >
-                  <div className="p-2 rounded-xl bg-accent/30 group-hover:bg-background/50 transition-colors">
+                  <div className="p-2 transition-colors rounded-xl bg-accent/30 group-hover:bg-background/50">
                     <Search className="w-5 h-5 text-muted-foreground" />
                   </div>
                   <span className="text-sm font-medium">{search}</span>
@@ -493,7 +493,7 @@ const SearchPage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
               onClick={() => setIsServiceModalOpen(false)}
             />
             <ServiceModal
