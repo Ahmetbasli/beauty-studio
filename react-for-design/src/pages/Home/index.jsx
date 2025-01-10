@@ -17,6 +17,19 @@ import {
   MoreVertical,
   Map,
 } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/pagination";
+
+// Add custom styles for pagination
+const styles = `
+  .swiper-pagination {
+    top: 83% !important;
+    bottom: auto !important;
+  }
+`;
 
 // Mock data
 const popularServices = [
@@ -73,6 +86,45 @@ const featuredArtists = [
     reviews: 156,
     image: "https://i.pravatar.cc/150?img=3",
     available: false,
+  },
+];
+
+const beautyServices = [
+  {
+    id: 1,
+    name: "Makeup",
+    image:
+      "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    id: 2,
+    name: "Hair Styling",
+    image:
+      "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    id: 3,
+    name: "Nails",
+    image:
+      "https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    id: 4,
+    name: "Skincare",
+    image:
+      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    id: 5,
+    name: "Lashes",
+    image:
+      "https://images.unsplash.com/photo-1583001931096-959e9a1a6223?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    id: 6,
+    name: "Brows",
+    image:
+      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop",
   },
 ];
 
@@ -217,46 +269,71 @@ const HomePage = () => {
   return (
     <div className="min-h-screen pb-20 bg-background">
       {/* Location Section */}
-      <div className="relative px-4 pt-6 pb-6 bg-primary">
-        {/* Location Selection */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-4"
+      <div className="relative h-[300px]">
+        {/* Add style tag for custom pagination */}
+        <style>{styles}</style>
+
+        {/* Background Slider */}
+        <Swiper
+          modules={[Autoplay, EffectFade, Pagination]}
+          effect="fade"
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          pagination={{
+            clickable: true,
+            bulletClass:
+              "inline-block w-2 h-2 mx-1 rounded-full bg-white/50 cursor-pointer transition-all duration-300",
+            bulletActiveClass: "!bg-primary !opacity-100",
+          }}
+          loop={true}
+          className="absolute inset-0 w-full h-full"
         >
-          <button
-            onClick={() => setIsLocationModalOpen(true)}
-            className="flex flex-col items-start w-full"
-          >
-            <span className="mb-1 text-xs font-medium tracking-wider uppercase text-primary-foreground/90">
-              YOUR LOCATION
-            </span>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-primary-foreground" />
-              <span className="text-base font-medium text-primary-foreground line-clamp-1">
-                {userLocation}
-              </span>
-              <ChevronRight className="w-5 h-5 ml-auto text-primary-foreground/90" />
-            </div>
-          </button>
-        </motion.div>
+          {beautyServices.map((service) => (
+            <SwiperSlide key={service.id}>
+              <div className="relative w-full h-full">
+                <img
+                  src={service.image}
+                  alt={service.name}
+                  className="object-cover w-full h-full"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/60" />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* Location Content */}
+        <div className="absolute top-0 left-0 right-0 z-10">
+          <div className="flex flex-col items-start w-full p-6">
+            <button
+              onClick={() => setIsLocationModalOpen(true)}
+              className="flex items-center px-6 py-3 space-x-2 text-sm font-medium transition-colors rounded-xl bg-background/90 backdrop-blur-sm hover:bg-background"
+            >
+              <MapPin className="w-4 h-4" />
+              <span>{userLocation || "Select Location"}</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Search Bar */}
-      <div className="relative px-4">
+      <div className="relative z-20 px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="relative mb-6 -mt-4"
+          className="relative mb-6 -mt-6"
         >
-          <div className="flex items-center p-4 shadow-lg bg-background rounded-2xl ring-1 ring-border/40">
+          <div
+            onClick={() => navigate("/search")}
+            className="flex items-center p-4 shadow-lg cursor-pointer bg-background rounded-2xl ring-1 ring-border/40"
+          >
             <Search className="w-5 h-5 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search services or artists..."
-              className="flex-1 ml-3 bg-transparent outline-none placeholder:text-muted-foreground"
-            />
+            <div className="flex-1 ml-3 text-muted-foreground">
+              Search services or artists...
+            </div>
           </div>
         </motion.div>
       </div>
@@ -271,7 +348,7 @@ const HomePage = () => {
           className="grid grid-cols-2 gap-4 mb-8"
         >
           <button
-            onClick={() => navigate("/quick-book")}
+            onClick={() => navigate("/search?filter=quickBook")}
             className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-primary/5"
           >
             <Sparkles className="mb-3 h-7 w-7 text-primary" />
@@ -281,7 +358,7 @@ const HomePage = () => {
             <p className="text-sm text-muted-foreground">Service in 60 mins</p>
           </button>
           <button
-            onClick={() => navigate("/top-rated")}
+            onClick={() => navigate("/search?filter=topRated")}
             className="p-6 overflow-hidden text-left shadow-lg rounded-3xl bg-secondary/5"
           >
             <Star className="mb-3 h-7 w-7 text-secondary" />
@@ -313,7 +390,8 @@ const HomePage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="p-4 transition-all border shadow-sm bg-background border-border/40 rounded-2xl hover:shadow-md"
+                onClick={() => navigate(`/search?service=${service.name}`)}
+                className="p-4 transition-all border shadow-sm cursor-pointer bg-background border-border/40 rounded-2xl hover:shadow-md"
               >
                 <div className="p-2 mb-3 rounded-full bg-primary/5 w-fit">
                   <div className="text-primary">{service.icon}</div>
