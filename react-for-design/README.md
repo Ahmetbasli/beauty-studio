@@ -1,96 +1,172 @@
-# Beauty Studio - UI Design Project
+# Beauty Studio
 
-## Project Overview
+A modern beauty service booking platform built with React. This application connects users with beauty professionals, allowing them to discover, book, and manage beauty services.
 
-This project is specifically focused on creating a beautiful, modern, and user-friendly UI design for a beauty service booking platform. The primary goal is to showcase UI/UX design principles and implementation, without backend functionality.
+## Features
 
-## Design Objectives
+### User Features
 
-- Create a luxury, modern interface for beauty service bookings
-- Implement mobile-first, responsive design
-- Showcase smooth animations and transitions
-- Demonstrate modern UI patterns and best practices
+- **Profile Management**
 
-## Features (UI Only)
+  - Personal profile customization
+  - Profile photo upload
+  - Contact information management
+  - Account settings
 
-### User Flow
+- **Service Discovery**
 
-1. **Role Selection**: Choose between Beauty Artist or Customer
-2. **Google Authentication**: Simple and secure sign-in process
-3. **Profile Creation**: Role-specific registration forms
-4. **Service Browsing**: Discover beauty services and artists
-5. **Booking Management**: View and manage appointments
+  - Browse beauty professionals
+  - Search by service type or artist name
+  - View detailed artist portfolios
+  - Read reviews and ratings
 
-## Pages
+- **Booking System**
 
-- `/` - Role Selection Page
+  - Real-time availability checking
+  - Service selection
+  - Date and time slot booking
+  - Booking management
 
-  - Initial landing page
-  - Choose between Beauty Artist or Customer
-  - Step 1 of the registration process
+- **Artist Profiles**
+  - Detailed artist information
+  - Service portfolio
+  - Pricing information
+  - Reviews and ratings
+  - Location and distance
 
-- `/signup` - Google Sign-in Page
+### Technical Features
 
-  - Google authentication
-  - Step 2 of the registration process
-  - Simplified sign-in experience
-
-- `/register` - Profile Completion Page
-
-  - Role-specific registration forms
-  - Step 3 of the registration process
-  - Different fields for artists and customers
-
-- `/login` - Login Page
-
-  - Quick Google sign-in for returning users
-  - Direct access to the platform
-
-- `/home` - Home Page
-
-  - Browse beauty services
-  - View featured artists
-  - Quick booking options
-
-- `/artist/:id` - Artist Detail Page
-  - Artist profile and portfolio
-  - Service offerings
-  - Booking interface
+- Modern React with Hooks
+- React Router for navigation
+- Framer Motion for animations
+- Tailwind CSS for styling
+- Responsive design
+- Mobile-first approach
 
 ## Tech Stack
 
-- React
-- Tailwind CSS
-- Framer Motion (for animations)
-- Shadcn UI Components
-- Lucide Icons
+- **Frontend Framework**: React
+- **Routing**: React Router v6
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Animations**: Framer Motion
+- **State Management**: React Hooks
+- **Build Tool**: Create React App
 
-## Important Note
+## Project Structure
 
-This is a UI-only implementation. All data is mocked and no actual backend integration is included. The project serves as a design reference and UI prototype.
-
-## Design Principles
-
-- Luxury and premium feel
-- Clean and minimalist aesthetics
-- Intuitive navigation
-- Smooth animations
-- Consistent color scheme and typography
-
-## Running the Project
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
+```
+src/
+├── components/         # Reusable components
+│   ├── Layout/        # Layout components
+│   ├── BottomNav/     # Bottom navigation
+│   └── ...
+├── pages/             # Page components
+│   ├── Home/
+│   ├── Profile/
+│   ├── Search/
+│   ├── Bookings/
+│   └── ...
+└── styles/            # Global styles
 ```
 
-## Design Assets
+## Getting Started
 
-- Color Scheme: Gold and soft pink theme
-- Typography: Poppins font family
-- Icons: Lucide icon set
-- Animations: Framer Motion library
-- Components: Shadcn UI
+1. Clone the repository:
+
+```bash
+git clone [repository-url]
+```
+
+2. Install dependencies:
+
+```bash
+cd beauty-studio
+npm install
+```
+
+3. Start the development server:
+
+```bash
+npm start
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+## Design System
+
+### Colors
+
+- Primary: #DBA858 (Gold)
+- Secondary: #E8C5C5 (Pink)
+- Accent: #F4F4F5
+- Background: #FFFFFF
+
+### Typography
+
+- Font Family: System default
+- Headings: Semi-bold
+- Body: Regular
+
+### Components
+
+- Rounded corners (border-radius)
+- Consistent spacing
+- Smooth transitions
+- Interactive hover states
+- Modern shadow effects
+
+## Pages
+
+### Home
+
+- Featured artists
+- Top-rated services
+- Quick booking access
+- Location selection
+
+### Profile
+
+- User information
+- Account settings
+- Preferences
+- Activity history
+
+### Search
+
+- Service search
+- Artist search
+- Filter options
+- Sort functionality
+
+### Artist Detail
+
+- Portfolio showcase
+- Service list
+- Reviews
+- Booking interface
+
+### Bookings
+
+- Upcoming appointments
+- Booking history
+- Booking details
+- Status tracking
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Design inspiration from modern booking platforms
+- Icons provided by Lucide React
+- UI components built with Tailwind CSS
