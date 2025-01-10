@@ -220,7 +220,7 @@ const ArtistDetailPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={() => navigate(-1)}
-            className="p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
+            className="p-2 transition-colors rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
           >
             <ArrowLeft className="w-5 h-5" />
           </motion.button>
@@ -229,7 +229,7 @@ const ArtistDetailPage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.1 }}
-              className="p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
+              className="p-2 transition-colors rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
             >
               <Share2 className="w-5 h-5" />
             </motion.button>
@@ -238,7 +238,7 @@ const ArtistDetailPage = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
               onClick={() => setIsLiked(!isLiked)}
-              className="p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
+              className="p-2 transition-colors rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
             >
               <Heart
                 className={`w-5 h-5 ${
@@ -308,7 +308,7 @@ const ArtistDetailPage = () => {
               key={service.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex gap-4 p-4 transition-all border shadow-sm bg-white border-border/40 rounded-2xl hover:shadow-md group"
+              className="flex gap-4 p-4 transition-all bg-white border shadow-sm border-border/40 rounded-2xl hover:shadow-md group"
             >
               <div
                 className="flex flex-1 gap-4 cursor-pointer"
@@ -366,7 +366,7 @@ const ArtistDetailPage = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
-              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer"
+              className="relative overflow-hidden cursor-pointer aspect-square rounded-xl group"
               onClick={() => navigate(`/artist/${id}/portfolio/${index}`)}
             >
               <img

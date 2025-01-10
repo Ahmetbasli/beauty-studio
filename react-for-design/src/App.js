@@ -18,6 +18,7 @@ import Payment from "./pages/Payment";
 import Layout from "./components/Layout";
 import BookingDetail from "./pages/BookingDetail";
 import ProfilePage from "./pages/Profile";
+import EditProfilePage from "./pages/Profile/EditProfile";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="/booking/:id" element={<BookingDetail />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/style-guide" element={<StyleGuide />} />
+          <Route path="/profile/edit" element={<EditProfilePage />} />
         </Routes>
       </Layout>
     </Router>
