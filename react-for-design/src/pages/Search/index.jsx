@@ -267,6 +267,19 @@ const SearchPage = () => {
       quickBook: true,
       services: ["Facial"],
     },
+    {
+      id: 5,
+      name: "Lisa Chen",
+      specialty: "Makeup & Hair",
+      rating: 4.9,
+      reviewCount: 143,
+      location: "Kuta, Bali",
+      distance: "2.8 km away",
+      image: "https://i.pravatar.cc/300?img=5",
+      verified: true,
+      quickBook: true,
+      services: ["Makeup", "Hair"],
+    }
   ];
 
   // Filter artists based on search query and active filters
@@ -293,8 +306,8 @@ const SearchPage = () => {
     // Filter by services
     if (
       activeFilters.services.length > 0 &&
-      !activeFilters.services.some((service) =>
-        artist.services.includes(service)
+      !artist.services.some((service) =>
+        activeFilters.services.includes(service)
       )
     ) {
       return false;

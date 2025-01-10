@@ -17,6 +17,7 @@ import ArtistReviews from "./pages/ArtistReviews";
 import Payment from "./pages/Payment";
 import Layout from "./components/Layout";
 import BookingDetail from "./pages/BookingDetail";
+import ProfilePage from "./pages/Profile";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/artist/:id" element={<ArtistDetailPage />} />
           <Route path="/artist/:id/services" element={<ArtistServices />} />
           <Route path="/artist/:id/portfolio" element={<ArtistPortfolio />} />
