@@ -15,6 +15,8 @@ import {
   AlertCircle,
   User,
   DollarSign,
+  Timer,
+  TimerOff,
 } from "lucide-react";
 
 // Mock data for artist's bookings
@@ -23,15 +25,17 @@ const mockBookings = [
     id: 1,
     customerName: "Emma Wilson",
     customerImage: "https://i.pravatar.cc/150?img=1",
-    customerPhone: "+1 234-567-8900",
-    customerEmail: "emma.wilson@example.com",
-    service: "Hair Coloring",
+    services: [
+      {
+        name: "Hair Coloring",
+        duration: "120 min",
+        price: "Rp 850.000",
+      },
+    ],
     date: "Today",
     time: "2:00 PM",
-    duration: "120 min",
     location: "Your Studio",
     status: "pending",
-    price: "Rp 850.000",
     notes: "Allergic to certain hair dyes, please check before proceeding",
     bookedAt: "2024-02-20T10:30:00Z",
   },
@@ -39,15 +43,22 @@ const mockBookings = [
     id: 2,
     customerName: "Sophie Brown",
     customerImage: "https://i.pravatar.cc/150?img=2",
-    customerPhone: "+1 234-567-8901",
-    customerEmail: "sophie.brown@example.com",
-    service: "Makeup",
+    services: [
+      {
+        name: "Makeup",
+        duration: "60 min",
+        price: "Rp 450.000",
+      },
+      {
+        name: "Hair Styling",
+        duration: "30 min",
+        price: "Rp 200.000",
+      },
+    ],
     date: "Today",
     time: "4:30 PM",
-    duration: "90 min",
     location: "Your Studio",
     status: "confirmed",
-    price: "Rp 650.000",
     notes: "Natural look preferred, bringing reference photos",
     bookedAt: "2024-02-19T15:45:00Z",
   },
@@ -55,17 +66,69 @@ const mockBookings = [
     id: 3,
     customerName: "Alice Johnson",
     customerImage: "https://i.pravatar.cc/150?img=3",
-    customerPhone: "+1 234-567-8902",
-    customerEmail: "alice.johnson@example.com",
-    service: "Hair Styling",
-    date: "Tomorrow",
+    services: [
+      {
+        name: "Hair Styling",
+        duration: "45 min",
+        price: "Rp 300.000",
+      },
+      {
+        name: "Hair Treatment",
+        duration: "30 min",
+        price: "Rp 250.000",
+      },
+    ],
+    date: "Today",
     time: "11:00 AM",
-    duration: "60 min",
     location: "Your Studio",
-    status: "confirmed",
-    price: "Rp 450.000",
+    status: "in_progress",
     notes: "Wedding guest hairstyle",
     bookedAt: "2024-02-19T09:15:00Z",
+    startedAt: "2024-02-19T11:00:00Z",
+  },
+  {
+    id: 4,
+    customerName: "Linda Chen",
+    customerImage: "https://i.pravatar.cc/150?img=4",
+    services: [
+      {
+        name: "Facial Treatment",
+        duration: "90 min",
+        price: "Rp 750.000",
+      },
+    ],
+    date: "Tomorrow",
+    time: "3:00 PM",
+    location: "Your Studio",
+    status: "cancelled",
+    notes: "Deep cleansing facial",
+    bookedAt: "2024-02-19T14:20:00Z",
+    cancelledAt: "2024-02-19T15:20:00Z",
+    cancellationReason: "Customer requested cancellation",
+  },
+  {
+    id: 5,
+    customerName: "Rachel Kim",
+    customerImage: "https://i.pravatar.cc/150?img=5",
+    services: [
+      {
+        name: "Nail Art",
+        duration: "60 min",
+        price: "Rp 350.000",
+      },
+      {
+        name: "Hand Spa",
+        duration: "30 min",
+        price: "Rp 200.000",
+      },
+    ],
+    date: "Today",
+    time: "1:30 PM",
+    location: "Your Studio",
+    status: "completed",
+    notes: "Geometric patterns preferred",
+    bookedAt: "2024-02-19T10:00:00Z",
+    completedAt: "2024-02-19T15:00:00Z",
   },
 ];
 
@@ -73,11 +136,13 @@ const StatusBadge = ({ status }) => {
   const getStatusStyles = () => {
     switch (status) {
       case "pending":
-        return "bg-amber-50 text-amber-700 border-amber-200";
+        return "bg-yellow-50 text-yellow-700 border-yellow-200";
       case "confirmed":
         return "bg-emerald-50 text-emerald-700 border-emerald-200";
-      case "completed":
+      case "in_progress":
         return "bg-blue-50 text-blue-700 border-blue-200";
+      case "completed":
+        return "bg-green-50 text-green-700 border-green-200";
       case "cancelled":
         return "bg-red-50 text-red-700 border-red-200";
       default:
@@ -85,11 +150,20 @@ const StatusBadge = ({ status }) => {
     }
   };
 
+  const getStatusLabel = () => {
+    switch (status) {
+      case "in_progress":
+        return "In Progress";
+      default:
+        return status.charAt(0).toUpperCase() + status.slice(1);
+    }
+  };
+
   return (
     <span
       className={`px-2.5 py-0.5 text-xs font-medium border rounded-full ${getStatusStyles()}`}
     >
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+      {getStatusLabel()}
     </span>
   );
 };
@@ -162,6 +236,30 @@ const BookingCard = ({ booking, onAccept, onDecline, onComplete }) => {
     onDecline(booking.id);
   };
 
+  const getFinishTime = (startTime, services) => {
+    const durationMinutes = services.reduce((total, service) => {
+      return total + parseInt(service.duration);
+    }, 0);
+
+    const [hours, minutes] = startTime.split(":").map((num) => parseInt(num));
+    const isPM = startTime.includes("PM");
+
+    let totalHours = hours + (isPM && hours !== 12 ? 12 : 0);
+    let endMinutes = minutes + durationMinutes;
+
+    totalHours = totalHours + Math.floor(endMinutes / 60);
+    endMinutes = endMinutes % 60;
+
+    let finishHours = totalHours % 24;
+    const newIsPM = finishHours >= 12;
+    finishHours = finishHours > 12 ? finishHours - 12 : finishHours;
+    finishHours = finishHours === 0 ? 12 : finishHours;
+
+    return `${finishHours}:${endMinutes.toString().padStart(2, "0")} ${
+      newIsPM ? "PM" : "AM"
+    }`;
+  };
+
   return (
     <>
       <motion.div
@@ -180,21 +278,35 @@ const BookingCard = ({ booking, onAccept, onDecline, onComplete }) => {
             />
             <div>
               <h3 className="font-medium">{booking.customerName}</h3>
-              <p className="text-sm text-muted-foreground">{booking.service}</p>
+              <p className="text-sm text-muted-foreground">
+                {booking.services.length}{" "}
+                {booking.services.length === 1 ? "service" : "services"}
+              </p>
             </div>
           </div>
           <StatusBadge status={booking.status} />
         </div>
 
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-4">
             <div className="flex gap-2 items-center text-sm">
               <Calendar className="w-4 h-4 text-primary" />
               <span>{booking.date}</span>
             </div>
-            <div className="flex gap-2 items-center text-sm">
-              <Clock className="w-4 h-4 text-primary" />
-              <span>{booking.time}</span>
+            <div className="space-y-1">
+              <div className="flex gap-2 items-center text-sm justify-end">
+                <Timer className="w-4 h-4 text-primary" />
+                <span>{booking.time}</span>
+              </div>
+              <div className="flex gap-2 items-center text-sm justify-end">
+                <TimerOff className="w-4 h-4 text-primary" />
+                <span>
+                  {getFinishTime(
+                    booking.time.replace(/\s/g, ""),
+                    booking.services
+                  )}
+                </span>
+              </div>
             </div>
           </div>
           <div className="flex gap-2 items-center text-sm">
@@ -217,7 +329,15 @@ const BookingCard = ({ booking, onAccept, onDecline, onComplete }) => {
         </div>
 
         <div className="flex justify-between items-center pt-2 border-t border-border/40">
-          <span className="font-medium">{booking.price}</span>
+          <span className="font-medium">
+            {booking.services
+              .reduce((total, service) => {
+                const price = parseInt(service.price.replace(/[^0-9]/g, ""));
+                return total + price;
+              }, 0)
+              .toLocaleString("id-ID", { style: "currency", currency: "IDR" })
+              .replace("IDR", "Rp")}
+          </span>
           <div className="flex gap-2">
             {booking.status === "pending" && (
               <>
@@ -256,29 +376,27 @@ const BookingCard = ({ booking, onAccept, onDecline, onComplete }) => {
         </div>
       </motion.div>
 
-      {/* Confirmation Modals */}
-      <AnimatePresence>
-        <ConfirmationModal
-          isOpen={showAcceptModal}
-          onClose={() => setShowAcceptModal(false)}
-          onConfirm={handleAcceptConfirm}
-          title="Accept Booking"
-          description="Are you sure you want to accept this booking? The customer will be notified and your schedule will be updated."
-          confirmText="Accept"
-          confirmButtonClass="bg-[#4CAF50] hover:bg-[#43A047]"
-          icon={Check}
-        />
-        <ConfirmationModal
-          isOpen={showDeclineModal}
-          onClose={() => setShowDeclineModal(false)}
-          onConfirm={handleDeclineConfirm}
-          title="Decline Booking"
-          description="Are you sure you want to decline this booking? This action cannot be undone and the customer will be notified."
-          confirmText="Decline"
-          confirmButtonClass="bg-red-600 hover:bg-red-700"
-          icon={X}
-        />
-      </AnimatePresence>
+      <ConfirmationModal
+        isOpen={showAcceptModal}
+        onClose={() => setShowAcceptModal(false)}
+        onConfirm={handleAcceptConfirm}
+        title="Accept Booking"
+        description="Are you sure you want to accept this booking? The customer will be notified."
+        confirmText="Accept"
+        confirmButtonClass="bg-[#4CAF50] hover:bg-[#4CAF50]/90"
+        icon={Check}
+      />
+
+      <ConfirmationModal
+        isOpen={showDeclineModal}
+        onClose={() => setShowDeclineModal(false)}
+        onConfirm={handleDeclineConfirm}
+        title="Decline Booking"
+        description="Are you sure you want to decline this booking? This action cannot be undone and the customer will be refunded."
+        confirmText="Decline"
+        confirmButtonClass="bg-red-600 hover:bg-red-700"
+        icon={X}
+      />
     </>
   );
 };

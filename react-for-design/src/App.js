@@ -23,6 +23,7 @@ import ArtistDashboard from "./pages/ArtistDashboard";
 import ArtistBookings from "./pages/ArtistBookings";
 import ArtistBookingHistory from "./pages/ArtistBookingHistory";
 import ArtistBookingDetail from "./pages/ArtistBookingDetail";
+import ArtistBookingCancellation from "./pages/ArtistBookingCancellation";
 
 function App() {
   return (
@@ -60,6 +61,10 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/style-guide" element={<StyleGuide />} />
           <Route path="/profile/edit" element={<EditProfilePage />} />
+          <Route
+            path="/artist/bookings/:id/cancel"
+            element={<ArtistBookingCancellation />}
+          />
         </Routes>
       </Layout>
     </Router>
