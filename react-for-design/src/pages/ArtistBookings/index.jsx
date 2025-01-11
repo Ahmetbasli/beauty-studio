@@ -294,11 +294,11 @@ const BookingCard = ({ booking, onAccept, onDecline, onComplete }) => {
               <span>{booking.date}</span>
             </div>
             <div className="space-y-1">
-              <div className="flex gap-2 items-center text-sm justify-end">
+              <div className="flex gap-2 justify-end items-center text-sm">
                 <Timer className="w-4 h-4 text-primary" />
                 <span>{booking.time}</span>
               </div>
-              <div className="flex gap-2 items-center text-sm justify-end">
+              <div className="flex gap-2 justify-end items-center text-sm">
                 <TimerOff className="w-4 h-4 text-primary" />
                 <span>
                   {getFinishTime(
@@ -452,58 +452,63 @@ const ArtistBookings = () => {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-10 border-b backdrop-blur-xl bg-background/80 border-border/40">
-        <div className="p-4">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-semibold">Bookings</h1>
+      <div className="sticky top-0 z-10 bg-white border-b border-border/40">
+        <div className="flex justify-between items-center p-4">
+          <h1 className="text-xl font-semibold">Bookings</h1>
+          <div className="flex gap-2 items-center">
+            <button
+              onClick={() => navigate("/artist/availability")}
+              className="p-2 rounded-full transition-colors hover:bg-accent/50"
+            >
+              <Clock className="w-5 h-5" />
+            </button>
             <button
               onClick={() => navigate("/artist/bookings/history")}
-              className="p-2 rounded-lg transition-colors hover:bg-accent"
+              className="p-2 rounded-full transition-colors hover:bg-accent/50"
             >
               <History className="w-5 h-5" />
             </button>
           </div>
-
-          {/* Search Bar */}
-          <div className="relative mb-4">
-            <input
-              type="text"
-              placeholder="Search by customer or service..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-4 py-2 pl-10 w-full rounded-lg border transition-colors border-border/40 focus:outline-none focus:ring-2 focus:ring-primary/20"
-            />
-            <User className="absolute left-3 top-1/2 w-5 h-5 transform -translate-y-1/2 text-muted-foreground" />
-          </div>
-
-          {/* Date Filter */}
-          <div className="grid grid-cols-4 gap-2">
-            {[
-              { value: "all", label: "All" },
-              { value: "today", label: "Today" },
-              { value: "tomorrow", label: "Tomorrow" },
-              { value: "week", label: "This Week" },
-            ].map((filter) => (
-              <button
-                key={filter.value}
-                onClick={() => setDateFilter(filter.value)}
-                className={`py-1.5 px-3 text-sm font-medium rounded-lg transition-colors ${
-                  dateFilter === filter.value
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
-                }`}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
         </div>
-      </header>
+      </div>
 
-      {/* Content */}
-      <div className="flex-1">
+      <div className="p-4 space-y-4">
+        {/* Search Bar */}
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search by customer or service..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="px-4 py-2 pl-10 w-full rounded-lg border transition-colors border-border/40 focus:outline-none focus:ring-2 focus:ring-primary/20"
+          />
+          <User className="absolute left-3 top-1/2 w-5 h-5 transform -translate-y-1/2 text-muted-foreground" />
+        </div>
+
+        {/* Date Filter */}
+        <div className="grid grid-cols-4 gap-2">
+          {[
+            { value: "all", label: "All" },
+            { value: "today", label: "Today" },
+            { value: "tomorrow", label: "Tomorrow" },
+            { value: "week", label: "This Week" },
+          ].map((filter) => (
+            <button
+              key={filter.value}
+              onClick={() => setDateFilter(filter.value)}
+              className={`py-1.5 px-3 text-sm font-medium rounded-lg transition-colors ${
+                dateFilter === filter.value
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent"
+              }`}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
+
         {/* Bookings List */}
-        <div className="p-4 space-y-4">
+        <div className="space-y-4">
           {filteredBookings.length > 0 ? (
             filteredBookings.map((booking) => (
               <BookingCard

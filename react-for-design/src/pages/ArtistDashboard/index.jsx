@@ -100,17 +100,17 @@ const ArtistDashboard = () => {
     <div className="min-h-screen bg-[#FAFAFA]">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white border-b border-border/40">
-        <div className="flex items-center justify-between p-4">
+        <div className="flex justify-between items-center p-4">
           <div>
             <h1 className="text-xl font-semibold">Dashboard</h1>
             <p className="text-sm text-muted-foreground">
               Welcome back, Sarah!
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <button className="relative p-2 transition-colors rounded-full hover:bg-accent/50">
+          <div className="flex gap-3 items-center">
+            <button className="relative p-2 rounded-full transition-colors hover:bg-accent/50">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full" />
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-primary" />
             </button>
           </div>
         </div>
@@ -119,8 +119,8 @@ const ArtistDashboard = () => {
       <div className="p-4 space-y-6">
         {/* Online/Offline Toggle */}
         <div className="p-4 bg-white rounded-2xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="flex justify-between items-center">
+            <div className="flex gap-3 items-center">
               <div
                 className={`p-2 rounded-xl ${
                   isOnline ? "bg-primary/10" : "bg-muted"
@@ -159,10 +159,10 @@ const ArtistDashboard = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-4 bg-white rounded-2xl cursor-pointer transition-colors hover:bg-accent/50"
+            className="p-4 bg-white rounded-2xl transition-colors cursor-pointer hover:bg-accent/50"
             onClick={() => navigate("/artist/earnings")}
           >
-            <div className="p-2 w-fit rounded-xl bg-primary/10">
+            <div className="p-2 rounded-xl w-fit bg-primary/10">
               <DollarSign className="w-5 h-5 text-primary" />
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -179,9 +179,29 @@ const ArtistDashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
+            className="p-4 bg-white rounded-2xl transition-colors cursor-pointer hover:bg-accent/50"
+            onClick={() => navigate("/artist/availability")}
+          >
+            <div className="p-2 rounded-xl w-fit bg-primary/10">
+              <Clock className="w-5 h-5 text-primary" />
+            </div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Set Availability
+            </p>
+            <div className="flex justify-between items-center">
+              <p className="text-2xl font-semibold">
+                {mockData.stats.totalBookings} slots
+              </p>
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
             className="p-4 bg-white rounded-2xl"
           >
-            <div className="p-2 w-fit rounded-xl bg-primary/10">
+            <div className="p-2 rounded-xl w-fit bg-primary/10">
               <Calendar className="w-5 h-5 text-primary" />
             </div>
             <p className="mt-2 text-sm text-muted-foreground">Total Bookings</p>
@@ -193,14 +213,14 @@ const ArtistDashboard = () => {
 
         {/* Today's Appointments */}
         <div className="bg-white rounded-2xl">
-          <div className="flex items-center justify-between p-4 border-b border-border/40">
+          <div className="flex justify-between items-center p-4 border-b border-border/40">
             <h2 className="font-medium">Today's Appointments</h2>
             <button
               onClick={() => navigate("/artist/appointments")}
               className="flex items-center text-sm text-primary"
             >
               View all
-              <ChevronRight className="w-4 h-4 ml-1" />
+              <ChevronRight className="ml-1 w-4 h-4" />
             </button>
           </div>
           <div className="divide-y divide-border/40">
@@ -209,10 +229,10 @@ const ArtistDashboard = () => {
                 key={appointment.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 cursor-pointer transition-colors hover:bg-accent/50"
+                className="p-4 transition-colors cursor-pointer hover:bg-accent/50"
                 onClick={() => navigate(`/artist/bookings/${appointment.id}`)}
               >
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex justify-between items-start mb-3">
                   <div>
                     <h3 className="font-medium">{appointment.customerName}</h3>
                     <p className="text-sm text-muted-foreground">
@@ -223,15 +243,15 @@ const ArtistDashboard = () => {
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center text-sm text-muted-foreground">
-                    <Clock className="w-4 h-4 mr-2" />
+                    <Clock className="mr-2 w-4 h-4" />
                     {appointment.time}
                   </div>
                   <div className="flex items-center text-sm text-muted-foreground">
-                    <MapPin className="w-4 h-4 mr-2" />
+                    <MapPin className="mr-2 w-4 h-4" />
                     {appointment.location}
                   </div>
                   <div className="flex items-center text-sm font-medium text-primary">
-                    <DollarSign className="w-4 h-4 mr-2" />
+                    <DollarSign className="mr-2 w-4 h-4" />
                     {appointment.price}
                   </div>
                 </div>
@@ -242,7 +262,7 @@ const ArtistDashboard = () => {
 
         {/* Notifications */}
         <div className="bg-white rounded-2xl">
-          <div className="flex items-center justify-between p-4 border-b border-border/40">
+          <div className="flex justify-between items-center p-4 border-b border-border/40">
             <h2 className="font-medium">Notifications</h2>
             <button className="text-sm text-primary">Mark all as read</button>
           </div>
@@ -254,7 +274,7 @@ const ArtistDashboard = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className={`p-4 ${!notification.isRead ? "bg-primary/5" : ""}`}
               >
-                <div className="flex items-start gap-3">
+                <div className="flex gap-3 items-start">
                   <div
                     className={`p-2 rounded-xl ${
                       !notification.isRead ? "bg-primary/10" : "bg-accent"

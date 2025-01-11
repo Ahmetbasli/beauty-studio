@@ -28,6 +28,8 @@ import ArtistEarnings from "./pages/ArtistEarnings";
 import ArtistWithdrawal from "./pages/ArtistWithdrawal";
 import ArtistProfile from "./pages/ArtistProfile";
 import EditServices from "./pages/ArtistProfile/EditServices";
+import EditBio from "./pages/ArtistProfile/EditBio";
+import ArtistAvailability from "./pages/ArtistAvailability";
 
 function App() {
   return (
@@ -76,6 +78,8 @@ function App() {
             path="/artist/profile/edit-services"
             element={<EditServices />}
           />
+          <Route path="/artist/profile/edit-bio" element={<EditBio />} />
+          <Route path="/artist/availability" element={<ArtistAvailability />} />
         </Routes>
       </Layout>
     </Router>
