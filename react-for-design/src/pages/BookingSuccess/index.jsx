@@ -91,13 +91,17 @@ const BookingSuccess = () => {
                   </div>
                 )}
               </div>
-              <p className="text-sm text-muted-foreground">{artist.specialty}</p>
+              <p className="text-sm text-muted-foreground">
+                {artist.specialty}
+              </p>
             </div>
           </div>
 
           {/* Services */}
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-muted-foreground">Services</h4>
+            <h4 className="text-sm font-medium text-muted-foreground">
+              Services
+            </h4>
             {Array.isArray(service) ? (
               service.map((s) => (
                 <div key={s.id} className="flex justify-between items-center">
@@ -108,7 +112,9 @@ const BookingSuccess = () => {
             ) : (
               <div className="flex justify-between items-center">
                 <span className="font-medium">{service.name}</span>
-                <span className="text-primary font-medium">{service.price}</span>
+                <span className="text-primary font-medium">
+                  {service.price}
+                </span>
               </div>
             )}
           </div>
@@ -160,4 +166,4 @@ const BookingSuccess = () => {
   );
 };
 
-export default BookingSuccess; 
+export default BookingSuccess;

@@ -120,22 +120,22 @@ const ServiceDetail = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           onClick={() => navigate(-1)}
-          className="absolute p-2 rounded-full top-4 left-4 bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
+          className="absolute top-4 left-4 p-2 rounded-full backdrop-blur-sm transition-colors bg-background/80 hover:bg-background"
         >
           <ArrowLeft className="w-5 h-5" />
         </motion.button>
       </div>
 
       {/* Content */}
-      <div className="px-4 -mt-16 relative">
-        <div className="p-6 bg-background border border-border/40 rounded-2xl shadow-sm">
+      <div className="relative px-4 -mt-16">
+        <div className="p-6 rounded-2xl border shadow-sm bg-background border-border/40">
           {/* Header */}
-          <div className="flex items-start justify-between mb-4">
+          <div className="flex justify-between items-start mb-4">
             <div>
               <h1 className="text-2xl font-semibold">{serviceData.name}</h1>
-              <div className="flex items-center gap-4 mt-2">
+              <div className="flex gap-4 items-center mt-2">
                 <div className="flex items-center text-sm text-muted-foreground">
-                  <Clock className="w-4 h-4 mr-1" />
+                  <Clock className="mr-1 w-4 h-4" />
                   {serviceData.duration}
                 </div>
                 <div className="flex items-center">
@@ -155,14 +155,14 @@ const ServiceDetail = () => {
           </div>
 
           {/* Description */}
-          <p className="text-muted-foreground mb-6">
+          <p className="mb-6 text-muted-foreground">
             {serviceData.description}
           </p>
 
           {/* Book Now Button */}
           <button
             onClick={handleBooking}
-            className="w-full py-3 mb-6 font-medium text-white transition-colors rounded-xl bg-primary hover:bg-primary/90"
+            className="py-3 mb-6 w-full font-medium text-white rounded-xl transition-colors bg-primary hover:bg-primary/90"
           >
             Book Now
           </button>
@@ -170,7 +170,7 @@ const ServiceDetail = () => {
           {/* Benefits */}
           <div className="space-y-6">
             <div>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex gap-2 items-center mb-3">
                 <Sparkles className="w-5 h-5 text-primary" />
                 <h2 className="text-lg font-medium">Benefits</h2>
               </div>
@@ -178,7 +178,7 @@ const ServiceDetail = () => {
                 {serviceData.benefits.map((benefit, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-2 text-sm text-muted-foreground"
+                    className="flex gap-2 items-start text-sm text-muted-foreground"
                   >
                     <CheckCircle className="w-4 h-4 mt-0.5 text-primary" />
                     <span>{benefit}</span>
@@ -189,7 +189,7 @@ const ServiceDetail = () => {
 
             {/* What to Expect */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex gap-2 items-center mb-3">
                 <Timer className="w-5 h-5 text-primary" />
                 <h2 className="text-lg font-medium">What to Expect</h2>
               </div>
@@ -197,7 +197,7 @@ const ServiceDetail = () => {
                 {serviceData.whatToExpect.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-2 text-sm text-muted-foreground"
+                    className="flex gap-2 items-start text-sm text-muted-foreground"
                   >
                     <CheckCircle className="w-4 h-4 mt-0.5 text-primary" />
                     <span>{item}</span>
@@ -208,7 +208,7 @@ const ServiceDetail = () => {
 
             {/* Additional Information */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex gap-2 items-center mb-3">
                 <Info className="w-5 h-5 text-primary" />
                 <h2 className="text-lg font-medium">Additional Information</h2>
               </div>
@@ -216,7 +216,7 @@ const ServiceDetail = () => {
                 {serviceData.additionalInfo.map((info, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-2 text-sm text-muted-foreground"
+                    className="flex gap-2 items-start text-sm text-muted-foreground"
                   >
                     <CheckCircle className="w-4 h-4 mt-0.5 text-primary" />
                     <span>{info}</span>
@@ -227,7 +227,7 @@ const ServiceDetail = () => {
 
             {/* Popular With */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex gap-2 items-center mb-3">
                 <Users className="w-5 h-5 text-primary" />
                 <h2 className="text-lg font-medium">Popular With</h2>
               </div>
@@ -235,7 +235,7 @@ const ServiceDetail = () => {
                 {serviceData.popularWith.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-2 text-sm text-muted-foreground"
+                    className="flex gap-2 items-start text-sm text-muted-foreground"
                   >
                     <CheckCircle className="w-4 h-4 mt-0.5 text-primary" />
                     <span>{item}</span>
