@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ArrowLeft,
   Star,
@@ -94,109 +94,10 @@ const artistData = {
   },
 };
 
-const BookingModal = ({
-  isOpen,
-  onClose,
-  artistData,
-  navigate,
-  id,
-  selectedService,
-}) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState("10:00");
-
-  const handleConfirm = () => {
-    if (selectedTime && selectedService) {
-      onClose();
-      navigate(`/payment/${id}`);
-    }
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="w-full max-w-md p-6 mx-4 bg-white rounded-2xl"
-      >
-        {/* Modal Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold">Book Appointment</h2>
-          <button
-            onClick={onClose}
-            className="p-2 transition-colors rounded-full hover:bg-accent/50"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Selected Service */}
-        <div className="p-4 mb-6 border rounded-xl border-border/40 bg-accent/50">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-medium">{selectedService?.name}</h3>
-            <span className="font-medium text-primary">
-              {selectedService?.price}
-            </span>
-          </div>
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Clock className="w-4 h-4 mr-1" />
-            {selectedService?.duration}
-          </div>
-        </div>
-
-        {/* Date Selection */}
-        <div className="mb-6">
-          <label className="block mb-2 text-sm font-medium">Select Date</label>
-          <button className="flex items-center justify-between w-full px-4 py-3 text-left border rounded-xl border-border/40 hover:bg-accent/50">
-            <span>{selectedDate.toLocaleDateString()}</span>
-            <ChevronDown className="w-4 h-4 text-muted-foreground" />
-          </button>
-        </div>
-
-        {/* Time Slots */}
-        <div className="mb-6">
-          <label className="block mb-2 text-sm font-medium">
-            Available Times
-          </label>
-          <div className="grid grid-cols-3 gap-2">
-            {artistData.availability.today.map((time, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedTime(time)}
-                className={`px-4 py-2 text-sm font-medium transition-colors border rounded-lg ${
-                  selectedTime === time
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border/40 hover:bg-accent/50"
-                }`}
-              >
-                {time}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Booking Button */}
-        <button
-          onClick={handleConfirm}
-          disabled={!selectedTime || !selectedService}
-          className="w-full py-4 font-medium text-white transition-colors rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Book Now
-        </button>
-      </motion.div>
-    </div>
-  );
-};
-
 const ArtistDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [isLiked, setIsLiked] = useState(false);
-  const [selectedService, setSelectedService] = useState(null);
-  const [showBookingModal, setShowBookingModal] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
@@ -211,9 +112,10 @@ const ArtistDetailPage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleBooking = (bookingDetails) => {
-    console.log("Booking confirmed:", bookingDetails);
-    // Handle booking confirmation
+  const handleBooking = (service) => {
+    navigate(`/artist/${id}/booking`, {
+      state: { selectedService: service, artistData },
+    });
   };
 
   return (
@@ -361,8 +263,7 @@ const ArtistDetailPage = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedService(service);
-                      setShowBookingModal(true);
+                      handleBooking(service);
                     }}
                     className="px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-primary hover:bg-primary/90"
                   >
@@ -469,20 +370,6 @@ const ArtistDetailPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Booking Modal */}
-      <AnimatePresence>
-        {showBookingModal && (
-          <BookingModal
-            isOpen={showBookingModal}
-            onClose={() => setShowBookingModal(false)}
-            artistData={artistData}
-            navigate={navigate}
-            id={id}
-            selectedService={selectedService}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 };

@@ -30,6 +30,7 @@ import ArtistProfile from "./pages/ArtistProfile";
 import EditServices from "./pages/ArtistProfile/EditServices";
 import EditBio from "./pages/ArtistProfile/EditBio";
 import ArtistAvailability from "./pages/ArtistAvailability";
+import ArtistBooking from "./pages/ArtistBooking";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
             element={<ArtistBookingHistory />}
           />
           <Route path="/artist/:id" element={<ArtistDetailPage />} />
+          <Route path="/artist/:id/booking" element={<ArtistBooking />} />
           <Route path="/artist/:id/services" element={<ArtistServices />} />
           <Route path="/artist/:id/portfolio" element={<ArtistPortfolio />} />
           <Route
