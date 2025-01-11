@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ArrowLeft,
   Clock,
@@ -11,13 +11,51 @@ import {
   Users,
   Timer,
   Sparkles,
-  X,
-  ChevronDown,
 } from "lucide-react";
 
 // Mock data for the service
 const serviceData = {
   id: 1,
+  artistId: 1, // Added artistId for navigation
+  artist: {
+    id: 1,
+    name: "Sarah Mitchell",
+    specialty: "Makeup Artist",
+    rating: 4.9,
+    reviewCount: 127,
+    location: "Denpasar, Bali",
+    distance: "2.3 km away",
+    image: "https://i.pravatar.cc/300?img=2",
+    verified: true,
+    description:
+      "Professional makeup artist with 8+ years of experience specializing in bridal, editorial, and natural makeup looks. Featured in Vogue and Elle magazines.",
+    services: [
+      {
+        id: 1,
+        name: "Bridal Makeup",
+        duration: "120 min",
+        price: "$199",
+        image:
+          "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=800&auto=format&fit=crop",
+      },
+      {
+        id: 2,
+        name: "Natural Makeup",
+        duration: "60 min",
+        price: "$89",
+        image:
+          "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=800&auto=format&fit=crop",
+      },
+      {
+        id: 3,
+        name: "Party Makeup",
+        duration: "90 min",
+        price: "$129",
+        image:
+          "https://images.unsplash.com/photo-1526045478516-99145907023c?q=80&w=800&auto=format&fit=crop",
+      },
+    ],
+  },
   name: "Bridal Makeup",
   duration: "120 min",
   price: "$199",
@@ -53,108 +91,17 @@ const serviceData = {
   ],
 };
 
-const BookingModal = ({ isOpen, onClose, service, onConfirm }) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(null);
-
-  // Mock available times
-  const availableTimes = ["10:00 AM", "2:30 PM", "4:00 PM", "5:30 PM"];
-
-  if (!isOpen) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
-        className="w-full max-w-md p-6 mx-4 overflow-hidden bg-background rounded-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Modal Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold">Book Appointment</h2>
-          <button
-            onClick={onClose}
-            className="p-2 transition-colors rounded-full hover:bg-accent/50"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Selected Service */}
-        <div className="p-4 mb-6 border rounded-xl border-border/40 bg-accent/50">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-medium">{service.name}</h3>
-            <span className="font-medium text-primary">{service.price}</span>
-          </div>
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Clock className="w-4 h-4 mr-1" />
-            {service.duration}
-          </div>
-        </div>
-
-        {/* Date Selection */}
-        <div className="mb-6">
-          <label className="block mb-2 text-sm font-medium">Select Date</label>
-          <button className="flex items-center justify-between w-full px-4 py-3 text-left border rounded-xl border-border/40 hover:bg-accent/50">
-            <span>{selectedDate.toLocaleDateString()}</span>
-            <ChevronDown className="w-4 h-4 text-muted-foreground" />
-          </button>
-        </div>
-
-        {/* Time Slots */}
-        <div className="mb-6">
-          <label className="block mb-2 text-sm font-medium">
-            Available Times
-          </label>
-          <div className="grid grid-cols-3 gap-2">
-            {availableTimes.map((time, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedTime(time)}
-                className={`px-4 py-2 text-sm font-medium transition-colors border rounded-lg ${
-                  selectedTime === time
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border/40 hover:bg-accent/50"
-                }`}
-              >
-                {time}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Booking Button */}
-        <button
-          onClick={() => {
-            onConfirm({ date: selectedDate, time: selectedTime });
-            onClose();
-          }}
-          disabled={!selectedTime}
-          className="w-full py-4 font-medium text-white transition-colors rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Confirm Booking
-        </button>
-      </motion.div>
-    </motion.div>
-  );
-};
-
 const ServiceDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [showBookingModal, setShowBookingModal] = useState(false);
 
-  const handleBooking = (bookingDetails) => {
-    console.log("Booking confirmed:", bookingDetails);
-    // Handle booking confirmation
+  const handleBooking = () => {
+    navigate(`/artist/${serviceData.artistId}/booking`, {
+      state: {
+        selectedService: serviceData,
+        artistData: serviceData.artist,
+      },
+    });
   };
 
   return (
@@ -214,7 +161,7 @@ const ServiceDetail = () => {
 
           {/* Book Now Button */}
           <button
-            onClick={() => setShowBookingModal(true)}
+            onClick={handleBooking}
             className="w-full py-3 mb-6 font-medium text-white transition-colors rounded-xl bg-primary hover:bg-primary/90"
           >
             Book Now
@@ -299,18 +246,6 @@ const ServiceDetail = () => {
           </div>
         </div>
       </div>
-
-      {/* Booking Modal */}
-      <AnimatePresence>
-        {showBookingModal && (
-          <BookingModal
-            isOpen={showBookingModal}
-            onClose={() => setShowBookingModal(false)}
-            service={serviceData}
-            onConfirm={handleBooking}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 };
