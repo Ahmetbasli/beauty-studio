@@ -19,6 +19,8 @@ import Layout from "./components/Layout";
 import BookingDetail from "./pages/BookingDetail";
 import ProfilePage from "./pages/Profile";
 import EditProfilePage from "./pages/Profile/EditProfile";
+import ArtistDashboard from "./pages/ArtistDashboard";
+import ArtistBookings from "./pages/ArtistBookings";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/artist/dashboard" element={<ArtistDashboard />} />
+          <Route path="/artist/bookings" element={<ArtistBookings />} />
           <Route path="/artist/:id" element={<ArtistDetailPage />} />
           <Route path="/artist/:id/services" element={<ArtistServices />} />
           <Route path="/artist/:id/portfolio" element={<ArtistPortfolio />} />

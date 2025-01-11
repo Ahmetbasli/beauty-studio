@@ -1,12 +1,37 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, CalendarClock, User } from "lucide-react";
+import {
+  Home,
+  CalendarClock,
+  User,
+  LayoutDashboard,
+  Settings,
+} from "lucide-react";
 
 const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isArtist = localStorage.getItem("selectedRole") === "artist";
 
-  const navItems = [
+  const artistNavItems = [
+    {
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      path: "/artist/dashboard",
+    },
+    {
+      label: "Bookings",
+      icon: CalendarClock,
+      path: "/artist/bookings",
+    },
+    {
+      label: "Settings",
+      icon: Settings,
+      path: "/profile",
+    },
+  ];
+
+  const customerNavItems = [
     {
       label: "Home",
       icon: Home,
@@ -23,6 +48,8 @@ const BottomNav = () => {
       path: "/profile",
     },
   ];
+
+  const navItems = isArtist ? artistNavItems : customerNavItems;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 border-t bg-background border-border/40">

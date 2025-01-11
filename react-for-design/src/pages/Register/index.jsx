@@ -10,7 +10,11 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Here you would handle form submission
-    navigate("/home");
+    if (selectedRole === "artist") {
+      navigate("/artist/dashboard");
+    } else {
+      navigate("/home");
+    }
   };
 
   return (
