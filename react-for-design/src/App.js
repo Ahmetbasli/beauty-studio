@@ -27,6 +27,7 @@ import ArtistBookingCancellation from "./pages/ArtistBookingCancellation";
 import ArtistEarnings from "./pages/ArtistEarnings";
 import ArtistWithdrawal from "./pages/ArtistWithdrawal";
 import ArtistProfile from "./pages/ArtistProfile";
+import EditServices from "./pages/ArtistProfile/EditServices";
 
 function App() {
   return (
@@ -71,6 +72,10 @@ function App() {
           <Route path="/artist/earnings" element={<ArtistEarnings />} />
           <Route path="/artist/withdrawal" element={<ArtistWithdrawal />} />
           <Route path="/artist/profile" element={<ArtistProfile />} />
+          <Route
+            path="/artist/profile/edit-services"
+            element={<EditServices />}
+          />
         </Routes>
       </Layout>
     </Router>
