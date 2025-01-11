@@ -112,9 +112,6 @@ const ArtistDashboard = () => {
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full" />
             </button>
-            <button className="p-2 transition-colors rounded-full hover:bg-accent/50">
-              <User className="w-5 h-5" />
-            </button>
           </div>
         </div>
       </div>
@@ -162,7 +159,8 @@ const ArtistDashboard = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-4 bg-white rounded-2xl"
+            className="p-4 bg-white rounded-2xl cursor-pointer transition-colors hover:bg-accent/50"
+            onClick={() => navigate("/artist/earnings")}
           >
             <div className="p-2 w-fit rounded-xl bg-primary/10">
               <DollarSign className="w-5 h-5 text-primary" />
@@ -170,9 +168,12 @@ const ArtistDashboard = () => {
             <p className="mt-2 text-sm text-muted-foreground">
               Today's Earnings
             </p>
-            <p className="text-2xl font-semibold">
-              {mockData.stats.todayEarnings}
-            </p>
+            <div className="flex justify-between items-center">
+              <p className="text-2xl font-semibold">
+                {mockData.stats.todayEarnings}
+              </p>
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            </div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

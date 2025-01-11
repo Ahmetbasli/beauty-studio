@@ -24,6 +24,9 @@ import ArtistBookings from "./pages/ArtistBookings";
 import ArtistBookingHistory from "./pages/ArtistBookingHistory";
 import ArtistBookingDetail from "./pages/ArtistBookingDetail";
 import ArtistBookingCancellation from "./pages/ArtistBookingCancellation";
+import ArtistEarnings from "./pages/ArtistEarnings";
+import ArtistWithdrawal from "./pages/ArtistWithdrawal";
+import ArtistProfile from "./pages/ArtistProfile";
 
 function App() {
   return (
@@ -65,6 +68,9 @@ function App() {
             path="/artist/bookings/:id/cancel"
             element={<ArtistBookingCancellation />}
           />
+          <Route path="/artist/earnings" element={<ArtistEarnings />} />
+          <Route path="/artist/withdrawal" element={<ArtistWithdrawal />} />
+          <Route path="/artist/profile" element={<ArtistProfile />} />
         </Routes>
       </Layout>
     </Router>

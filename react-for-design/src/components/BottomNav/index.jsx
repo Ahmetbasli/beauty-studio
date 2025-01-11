@@ -1,68 +1,43 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Home,
-  CalendarClock,
-  User,
-  LayoutDashboard,
-  Settings,
-} from "lucide-react";
+import { Home, CalendarClock, User, CalendarDays } from "lucide-react";
 
 const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const isArtist = localStorage.getItem("selectedRole") === "artist";
+  const isArtistDashboard = location.pathname.startsWith("/artist");
 
-  const artistNavItems = [
+  const navItems = [
     {
-      label: "Dashboard",
-      icon: LayoutDashboard,
-      path: "/artist/dashboard",
-    },
-    {
-      label: "Bookings",
-      icon: CalendarClock,
-      path: "/artist/bookings",
-    },
-    {
-      label: "Settings",
-      icon: Settings,
-      path: "/profile",
-    },
-  ];
-
-  const customerNavItems = [
-    {
-      label: "Home",
+      label: isArtistDashboard ? "Dashboard" : "Home",
       icon: Home,
-      path: "/home",
+      path: isArtistDashboard ? "/artist/dashboard" : "/home",
     },
     {
       label: "Bookings",
-      icon: CalendarClock,
-      path: "/bookings",
+      icon: isArtistDashboard ? CalendarDays : CalendarClock,
+      path: isArtistDashboard ? "/artist/bookings" : "/bookings",
     },
     {
       label: "Profile",
       icon: User,
-      path: "/profile",
+      path: isArtistDashboard ? "/artist/profile" : "/profile",
     },
   ];
 
-  const navItems = isArtist ? artistNavItems : customerNavItems;
-
   return (
-    <div className="fixed bottom-0 left-0 right-0 border-t bg-background border-border/40">
-      <div className="flex items-center justify-around px-4 py-2">
+    <div className="fixed right-0 bottom-0 left-0 border-t bg-background border-border/40">
+      <div className="flex justify-around items-center px-4 py-2">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
+          const Icon = item.icon;
           return (
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className="flex flex-col items-center py-2 px-6"
+              className="flex flex-col items-center px-6 py-2"
             >
-              <item.icon
+              <Icon
                 className={`w-6 h-6 mb-1 ${
                   isActive ? "text-primary" : "text-muted-foreground"
                 }`}
@@ -70,7 +45,7 @@ const BottomNav = () => {
               <span
                 className={`text-xs ${
                   isActive
-                    ? "text-primary font-medium"
+                    ? "font-medium text-primary"
                     : "text-muted-foreground"
                 }`}
               >
