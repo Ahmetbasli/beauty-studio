@@ -31,6 +31,7 @@ import EditServices from "./pages/ArtistProfile/EditServices";
 import EditBio from "./pages/ArtistProfile/EditBio";
 import ArtistAvailability from "./pages/ArtistAvailability";
 import ArtistBooking from "./pages/ArtistBooking";
+import BookingSuccess from "./pages/BookingSuccess";
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
           <Route path="/services/:id" element={<ServiceDetail />} />
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/booking/:id" element={<BookingDetail />} />
+          <Route path="/booking-success/:id" element={<BookingSuccess />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/style-guide" element={<StyleGuide />} />
           <Route path="/profile/edit" element={<EditProfilePage />} />

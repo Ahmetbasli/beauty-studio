@@ -130,12 +130,12 @@ const ArtistDetailPage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
 
         {/* Header Actions */}
-        <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4">
+        <div className="flex absolute top-0 right-0 left-0 justify-between items-center p-4">
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={() => navigate(-1)}
-            className="p-2 transition-colors rounded-full bg-white/90 backdrop-blur-sm hover:bg-white"
+            className="p-2 rounded-full backdrop-blur-sm transition-colors bg-white/90 hover:bg-white"
           >
             <ArrowLeft className="w-5 h-5 text-secondary-800" />
           </motion.button>
@@ -181,9 +181,9 @@ const ArtistDetailPage = () => {
       >
         {/* Artist Info Section */}
         <div className="relative bg-white rounded-t-[32px] px-4 py-6">
-          <div className="flex items-start justify-between">
+          <div className="flex justify-between items-start">
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex gap-2 items-center">
                 <h1 className="text-2xl font-semibold">{artistData.name}</h1>
                 {artistData.verified && (
                   <div className="p-0.5 rounded-full bg-primary">
@@ -204,9 +204,9 @@ const ArtistDetailPage = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 mt-4">
+          <div className="flex gap-4 items-center mt-4">
             <div className="flex items-center text-sm text-muted-foreground">
-              <MapPin className="w-4 h-4 mr-1" />
+              <MapPin className="mr-1 w-4 h-4" />
               {artistData.location}
             </div>
             <div className="text-sm text-muted-foreground">
@@ -221,14 +221,14 @@ const ArtistDetailPage = () => {
 
         {/* Services Section */}
         <div className="px-4 mt-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Services</h2>
             <button
               onClick={() => navigate(`/artist/${id}/services`)}
               className="flex items-center text-sm text-primary"
             >
               See all
-              <ChevronRight className="w-4 h-4 ml-1" />
+              <ChevronRight className="ml-1 w-4 h-4" />
             </button>
           </div>
           <div className="space-y-4">
@@ -237,7 +237,7 @@ const ArtistDetailPage = () => {
                 key={service.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex gap-4 p-4 transition-all bg-white border shadow-sm border-border/40 rounded-2xl hover:shadow-md group"
+                className="flex gap-4 p-4 bg-white rounded-2xl border shadow-sm transition-all border-border/40 hover:shadow-md group"
               >
                 <div
                   className="flex flex-1 gap-4 cursor-pointer"
@@ -251,7 +251,7 @@ const ArtistDetailPage = () => {
                   <div className="flex-1">
                     <h3 className="font-medium">{service.name}</h3>
                     <div className="flex items-center mt-1 text-sm text-muted-foreground">
-                      <Clock className="w-4 h-4 mr-1" />
+                      <Clock className="mr-1 w-4 h-4" />
                       {service.duration}
                     </div>
                     <p className="mt-2 text-sm font-medium text-primary">
@@ -265,7 +265,7 @@ const ArtistDetailPage = () => {
                       e.stopPropagation();
                       handleBooking(service);
                     }}
-                    className="px-4 py-2 text-sm font-medium text-white transition-all rounded-lg bg-primary hover:bg-primary/90"
+                    className="px-4 py-2 text-sm font-medium text-white rounded-lg transition-all bg-primary hover:bg-primary/90"
                   >
                     Book Now
                   </button>
@@ -277,14 +277,14 @@ const ArtistDetailPage = () => {
 
         {/* Portfolio Section */}
         <div className="px-4 mt-8 mb-20">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Portfolio</h2>
             <button
               onClick={() => navigate(`/artist/${id}/portfolio`)}
               className="flex items-center text-sm text-primary"
             >
               See all
-              <ChevronRight className="w-4 h-4 ml-1" />
+              <ChevronRight className="ml-1 w-4 h-4" />
             </button>
           </div>
           <div className="grid grid-cols-3 gap-2">
@@ -294,7 +294,7 @@ const ArtistDetailPage = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="relative overflow-hidden cursor-pointer aspect-square rounded-xl group"
+                className="overflow-hidden relative rounded-xl cursor-pointer aspect-square group"
                 onClick={() => navigate(`/artist/${id}/portfolio/${index}`)}
               >
                 <img
@@ -302,8 +302,8 @@ const ArtistDetailPage = () => {
                   alt={`Portfolio ${index + 1}`}
                   className="object-cover w-full h-full transition-transform group-hover:scale-110"
                 />
-                <div className="absolute inset-0 transition-opacity opacity-0 bg-black/40 group-hover:opacity-100" />
-                <ImageIcon className="absolute w-6 h-6 transition-opacity -translate-x-1/2 -translate-y-1/2 opacity-0 text-white/90 top-1/2 left-1/2 group-hover:opacity-100" />
+                <div className="absolute inset-0 opacity-0 transition-opacity bg-black/40 group-hover:opacity-100" />
+                <ImageIcon className="absolute top-1/2 left-1/2 w-6 h-6 opacity-0 transition-opacity -translate-x-1/2 -translate-y-1/2 text-white/90 group-hover:opacity-100" />
               </motion.div>
             ))}
           </div>
@@ -311,8 +311,8 @@ const ArtistDetailPage = () => {
 
         {/* Reviews Section */}
         <div className="px-4 mt-8 mb-20">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex gap-2 items-center">
               <h2 className="text-lg font-semibold">Reviews</h2>
               <div className="flex items-center text-sm text-muted-foreground">
                 <Star className="w-4 h-4 fill-primary text-primary" />
@@ -325,7 +325,7 @@ const ArtistDetailPage = () => {
               className="flex items-center text-sm text-primary"
             >
               See all
-              <ChevronRight className="w-4 h-4 ml-1" />
+              <ChevronRight className="ml-1 w-4 h-4" />
             </button>
           </div>
           <div className="space-y-4">
@@ -335,9 +335,9 @@ const ArtistDetailPage = () => {
                   key={review.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 border rounded-2xl border-border/40"
+                  className="p-4 rounded-2xl border border-border/40"
                 >
-                  <div className="flex items-start gap-3 mb-3">
+                  <div className="flex gap-3 items-start mb-3">
                     <img
                       src={review.user.image}
                       alt={review.user.name}
@@ -345,7 +345,7 @@ const ArtistDetailPage = () => {
                     />
                     <div>
                       <h3 className="font-medium">{review.user.name}</h3>
-                      <div className="flex items-center gap-2">
+                      <div className="flex gap-2 items-center">
                         <div className="flex">
                           {Array.from({ length: review.rating }).map(
                             (_, index) => (
