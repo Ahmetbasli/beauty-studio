@@ -20,18 +20,18 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Background Design */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="overflow-hidden absolute inset-0">
         <div className="absolute -top-1/2 right-0 h-[1000px] w-[1000px] rounded-full bg-primary/5" />
         <div className="absolute -bottom-1/4 -left-1/4 h-[800px] w-[800px] rounded-full bg-secondary/5" />
       </div>
 
       {/* Content */}
-      <div className="relative flex flex-col items-center min-h-screen px-4 py-16">
+      <div className="flex relative flex-col items-center px-4 py-16 min-h-screen">
         {/* Back Button */}
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="absolute flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors border rounded-full left-6 top-6 border-border/40 bg-background/95 text-muted-foreground backdrop-blur-sm hover:bg-accent hover:text-foreground"
+          className="flex absolute top-6 left-6 gap-2 items-center px-4 py-2 text-sm font-medium rounded-full border backdrop-blur-sm transition-colors border-border/40 bg-background/95 text-muted-foreground hover:bg-accent hover:text-foreground"
           onClick={() => navigate("/signup")}
         >
           <ArrowLeft className="w-4 h-4" />
@@ -39,7 +39,7 @@ const Register = () => {
         </motion.button>
 
         {/* Main Content */}
-        <div className="flex flex-col items-center justify-center flex-1 w-full">
+        <div className="flex flex-col flex-1 justify-center items-center w-full">
           {/* Logo/Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -49,7 +49,7 @@ const Register = () => {
             <img
               src="/logo-bell.png"
               alt="Beauty Studio"
-              className="w-auto h-16 mx-auto mb-4"
+              className="mx-auto mb-4 w-auto h-16"
             />
             <p className="text-2xl font-medium text-foreground">
               Complete your profile
@@ -63,7 +63,7 @@ const Register = () => {
             transition={{ delay: 0.1 }}
             className="flex flex-col items-center mb-10"
           >
-            <div className="inline-flex items-center justify-center px-6 py-2 border rounded-full border-primary/20 bg-primary/5">
+            <div className="inline-flex justify-center items-center px-6 py-2 rounded-full border border-primary/20 bg-primary/5">
               <span className="mr-2 font-medium text-primary">Step 3</span>
               <span className="text-primary/80">of 3</span>
               <span className="ml-3 text-sm text-muted-foreground">
@@ -77,7 +77,7 @@ const Register = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="flex items-center justify-center gap-3 mb-10"
+            className="flex gap-3 justify-center items-center mb-10"
           >
             <div className="p-2 rounded-full bg-primary/10">
               {selectedRole === "artist" ? (
@@ -113,7 +113,7 @@ const Register = () => {
                   <input
                     type="text"
                     id="firstName"
-                    className="w-full px-4 py-2 border rounded-lg border-input bg-background text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    className="px-4 py-2 w-full rounded-lg border border-input bg-background text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
                 <div>
@@ -126,7 +126,7 @@ const Register = () => {
                   <input
                     type="text"
                     id="lastName"
-                    className="w-full px-4 py-2 border rounded-lg border-input bg-background text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    className="px-4 py-2 w-full rounded-lg border border-input bg-background text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
               </div>
@@ -142,7 +142,7 @@ const Register = () => {
                   type="tel"
                   id="phone"
                   placeholder="+1 (555) 000-0000"
-                  className="w-full px-4 py-2 border rounded-lg border-input bg-background text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="px-4 py-2 w-full rounded-lg border border-input bg-background text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -166,7 +166,7 @@ const Register = () => {
                       ].map((specialization) => (
                         <label
                           key={specialization}
-                          className="flex items-center p-3 border rounded-lg cursor-pointer border-input bg-background hover:bg-accent"
+                          className="flex items-center p-3 rounded-lg border cursor-pointer border-input bg-background hover:bg-accent"
                         >
                           <input
                             type="checkbox"
@@ -191,27 +191,27 @@ const Register = () => {
                       type="number"
                       id="experience"
                       min="0"
-                      className="w-full px-4 py-2 border rounded-lg border-input bg-background text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      className="px-4 py-2 w-full rounded-lg border border-input bg-background text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
 
                   <div>
                     <label
                       htmlFor="instagram"
-                      className="flex items-center gap-2 mb-2 text-sm font-medium text-foreground"
+                      className="flex gap-2 items-center mb-2 text-sm font-medium text-foreground"
                     >
                       Instagram Profile
                       <span className="text-xs text-muted-foreground">
                         (Optional)
                       </span>
                     </label>
-                    <div className="flex items-center border rounded-lg border-input bg-background focus-within:ring-2 focus-within:ring-primary/20">
+                    <div className="flex items-center rounded-lg border border-input bg-background focus-within:ring-2 focus-within:ring-primary/20">
                       <span className="pl-4 text-muted-foreground">@</span>
                       <input
                         type="text"
                         id="instagram"
                         placeholder="your.profile"
-                        className="w-full px-2 py-2 bg-transparent border-0 rounded-lg text-foreground focus:outline-none"
+                        className="px-2 py-2 w-full bg-transparent rounded-lg border-0 text-foreground focus:outline-none"
                       />
                     </div>
                   </div>
@@ -220,7 +220,7 @@ const Register = () => {
 
               <button
                 type="submit"
-                className="w-full px-6 py-3 text-base font-medium transition-all rounded-lg shadow-lg bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl"
+                className="px-6 py-3 w-full text-base font-medium rounded-lg shadow-lg transition-all bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl"
               >
                 Complete Registration
               </button>

@@ -8,7 +8,7 @@ import {
   Check,
   X,
   MessageCircle,
-  Filter,
+  History,
   Phone,
   Mail,
   ChevronDown,
@@ -94,14 +94,15 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-const BookingDetailsModal = ({
-  booking,
+const ConfirmationModal = ({
   isOpen,
   onClose,
-  onAccept,
-  onDecline,
-  onComplete,
-  onMessage,
+  onConfirm,
+  title,
+  description,
+  confirmText,
+  confirmButtonClass,
+  icon: Icon,
 }) => {
   if (!isOpen) return null;
 
@@ -110,191 +111,56 @@ const BookingDetailsModal = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      className="flex fixed inset-0 z-50 justify-center items-center bg-black/50"
       onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="w-full max-w-md p-6 mx-4 overflow-auto bg-background rounded-2xl max-h-[90vh]"
+        className="p-6 mx-4 w-full max-w-sm rounded-2xl bg-background"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold">Booking Details</h2>
-          <StatusBadge status={booking.status} />
-        </div>
-
-        {/* Customer Info */}
-        <div className="p-4 mb-6 border rounded-xl border-border/40">
-          <div className="flex items-center gap-4 mb-4">
-            <img
-              src={booking.customerImage}
-              alt={booking.customerName}
-              className="object-cover w-16 h-16 rounded-full"
-            />
-            <div>
-              <h3 className="font-medium">{booking.customerName}</h3>
-              <div className="flex flex-col gap-1 mt-1">
-                <a
-                  href={`tel:${booking.customerPhone}`}
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-                >
-                  <Phone className="w-4 h-4" />
-                  {booking.customerPhone}
-                </a>
-                <a
-                  href={`mailto:${booking.customerEmail}`}
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-                >
-                  <Mail className="w-4 h-4" />
-                  {booking.customerEmail}
-                </a>
-              </div>
-            </div>
+        <div className="flex flex-col items-center text-center">
+          <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-[#D4B48D]">
+            <Icon className="w-8 h-8 text-white" />
           </div>
-        </div>
-
-        {/* Service Details */}
-        <div className="p-4 mb-6 space-y-4 border rounded-xl border-border/40">
-          <div>
-            <h3 className="mb-2 text-sm font-medium text-muted-foreground">
-              Service
-            </h3>
-            <p className="font-medium">{booking.service}</p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <h3 className="mb-2 text-sm font-medium text-muted-foreground">
-                Date
-              </h3>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-primary" />
-                <span>{booking.date}</span>
-              </div>
-            </div>
-            <div>
-              <h3 className="mb-2 text-sm font-medium text-muted-foreground">
-                Time
-              </h3>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-primary" />
-                <span>{booking.time}</span>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="mb-2 text-sm font-medium text-muted-foreground">
-              Duration
-            </h3>
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-primary" />
-              <span>{booking.duration}</span>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="mb-2 text-sm font-medium text-muted-foreground">
-              Location
-            </h3>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-primary" />
-              <span>{booking.location}</span>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="mb-2 text-sm font-medium text-muted-foreground">
-              Price
-            </h3>
-            <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-primary" />
-              <span className="font-medium">{booking.price}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Notes */}
-        {booking.notes && (
-          <div className="p-4 mb-6 space-y-2 border rounded-xl border-border/40">
-            <h3 className="font-medium">Customer Notes</h3>
-            <p className="text-sm text-muted-foreground">{booking.notes}</p>
-          </div>
-        )}
-
-        {/* Booking Time */}
-        <div className="p-4 mb-6 space-y-2 text-sm border rounded-xl border-border/40 bg-accent/50">
-          <p className="text-muted-foreground">
-            Booked on {new Date(booking.bookedAt).toLocaleDateString()} at{" "}
-            {new Date(booking.bookedAt).toLocaleTimeString()}
-          </p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="grid gap-3">
-          {booking.status === "pending" && (
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => {
-                  onAccept(booking.id);
-                  onClose();
-                }}
-                className="flex items-center justify-center gap-2 py-3 font-medium text-white transition-colors rounded-xl bg-emerald-600 hover:bg-emerald-700"
-              >
-                <Check className="w-5 h-5" />
-                Accept
-              </button>
-              <button
-                onClick={() => {
-                  onDecline(booking.id);
-                  onClose();
-                }}
-                className="flex items-center justify-center gap-2 py-3 font-medium text-white transition-colors bg-red-600 rounded-xl hover:bg-red-700"
-              >
-                <X className="w-5 h-5" />
-                Decline
-              </button>
-            </div>
-          )}
-          {booking.status === "confirmed" && (
+          <h3 className="mb-2 text-xl font-semibold">{title}</h3>
+          <p className="mb-6 text-base text-[#6B7280]">{description}</p>
+          <div className="grid grid-cols-2 gap-3 w-full">
             <button
-              onClick={() => {
-                onComplete(booking.id);
-                onClose();
-              }}
-              className="flex items-center justify-center gap-2 py-3 font-medium text-white transition-colors rounded-xl bg-primary hover:bg-primary/90"
+              onClick={onClose}
+              className="py-3 font-medium rounded-xl border hover:bg-accent"
             >
-              <Check className="w-5 h-5" />
-              Complete Service
+              Cancel
             </button>
-          )}
-          <button
-            onClick={() => {
-              onMessage(booking.id);
-              onClose();
-            }}
-            className="flex items-center justify-center w-full gap-2 py-3 font-medium transition-colors border rounded-xl hover:bg-accent"
-          >
-            <MessageCircle className="w-5 h-5" />
-            Message Customer
-          </button>
+            <button
+              onClick={onConfirm}
+              className={`py-3 font-medium text-white rounded-xl ${confirmButtonClass}`}
+            >
+              {confirmText}
+            </button>
+          </div>
         </div>
       </motion.div>
     </motion.div>
   );
 };
 
-const BookingCard = ({
-  booking,
-  onAccept,
-  onDecline,
-  onComplete,
-  onMessage,
-}) => {
-  const [showDetails, setShowDetails] = useState(false);
+const BookingCard = ({ booking, onAccept, onDecline, onComplete }) => {
+  const navigate = useNavigate();
+  const [showAcceptModal, setShowAcceptModal] = useState(false);
+  const [showDeclineModal, setShowDeclineModal] = useState(false);
+
+  const handleAcceptConfirm = () => {
+    setShowAcceptModal(false);
+    onAccept(booking.id);
+  };
+
+  const handleDeclineConfirm = () => {
+    setShowDeclineModal(false);
+    onDecline(booking.id);
+  };
 
   return (
     <>
@@ -302,11 +168,11 @@ const BookingCard = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
-        className="p-4 space-y-4 transition-colors border cursor-pointer rounded-xl border-border/40 hover:bg-accent/50"
-        onClick={() => setShowDetails(true)}
+        className="p-4 space-y-4 rounded-xl border transition-colors cursor-pointer border-border/40 hover:bg-accent/50"
+        onClick={() => navigate(`/artist/bookings/${booking.id}`)}
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="flex justify-between items-center">
+          <div className="flex gap-3 items-center">
             <img
               src={booking.customerImage}
               alt={booking.customerName}
@@ -321,23 +187,36 @@ const BookingCard = ({
         </div>
 
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm">
+          <div className="flex justify-between items-center">
+            <div className="flex gap-2 items-center text-sm">
               <Calendar className="w-4 h-4 text-primary" />
               <span>{booking.date}</span>
             </div>
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex gap-2 items-center text-sm">
               <Clock className="w-4 h-4 text-primary" />
               <span>{booking.time}</span>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex gap-2 items-center text-sm">
             <MapPin className="w-4 h-4 text-primary" />
-            <span>{booking.location}</span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(
+                  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    booking.location
+                  )}`,
+                  "_blank"
+                );
+              }}
+              className="font-medium text-primary hover:underline"
+            >
+              Open in Maps
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-border/40">
+        <div className="flex justify-between items-center pt-2 border-t border-border/40">
           <span className="font-medium">{booking.price}</span>
           <div className="flex gap-2">
             {booking.status === "pending" && (
@@ -345,18 +224,18 @@ const BookingCard = ({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onAccept(booking.id);
+                    setShowAcceptModal(true);
                   }}
-                  className="p-2 text-emerald-600 transition-colors rounded-lg hover:bg-emerald-50"
+                  className="p-2 text-emerald-600 rounded-lg transition-colors hover:bg-emerald-50"
                 >
                   <Check className="w-5 h-5" />
                 </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onDecline(booking.id);
+                    setShowDeclineModal(true);
                   }}
-                  className="p-2 text-red-600 transition-colors rounded-lg hover:bg-red-50"
+                  className="p-2 text-red-600 rounded-lg transition-colors hover:bg-red-50"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -368,33 +247,36 @@ const BookingCard = ({
                   e.stopPropagation();
                   onComplete(booking.id);
                 }}
-                className="px-3 py-1 text-sm font-medium text-white transition-colors rounded-lg bg-primary hover:bg-primary/90"
+                className="px-3 py-1 text-sm font-medium text-white rounded-lg transition-colors bg-primary hover:bg-primary/90"
               >
                 Complete
               </button>
             )}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onMessage(booking.id);
-              }}
-              className="p-2 transition-colors rounded-lg hover:bg-accent"
-            >
-              <MessageCircle className="w-5 h-5" />
-            </button>
           </div>
         </div>
       </motion.div>
 
+      {/* Confirmation Modals */}
       <AnimatePresence>
-        <BookingDetailsModal
-          booking={booking}
-          isOpen={showDetails}
-          onClose={() => setShowDetails(false)}
-          onAccept={onAccept}
-          onDecline={onDecline}
-          onComplete={onComplete}
-          onMessage={onMessage}
+        <ConfirmationModal
+          isOpen={showAcceptModal}
+          onClose={() => setShowAcceptModal(false)}
+          onConfirm={handleAcceptConfirm}
+          title="Accept Booking"
+          description="Are you sure you want to accept this booking? The customer will be notified and your schedule will be updated."
+          confirmText="Accept"
+          confirmButtonClass="bg-[#4CAF50] hover:bg-[#43A047]"
+          icon={Check}
+        />
+        <ConfirmationModal
+          isOpen={showDeclineModal}
+          onClose={() => setShowDeclineModal(false)}
+          onConfirm={handleDeclineConfirm}
+          title="Decline Booking"
+          description="Are you sure you want to decline this booking? This action cannot be undone and the customer will be notified."
+          confirmText="Decline"
+          confirmButtonClass="bg-red-600 hover:bg-red-700"
+          icon={X}
         />
       </AnimatePresence>
     </>
@@ -403,8 +285,6 @@ const BookingCard = ({
 
 const ArtistBookings = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("upcoming");
-  const [filterOpen, setFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [dateFilter, setDateFilter] = useState("all"); // all, today, tomorrow, week
 
@@ -423,22 +303,7 @@ const ArtistBookings = () => {
     // Handle booking completion
   };
 
-  const handleMessage = (bookingId) => {
-    navigate(`/chat/${bookingId}`);
-  };
-
   const filteredBookings = mockBookings.filter((booking) => {
-    // Status filter
-    if (activeTab === "upcoming") {
-      if (!["pending", "confirmed"].includes(booking.status)) {
-        return false;
-      }
-    } else {
-      if (!["completed", "cancelled"].includes(booking.status)) {
-        return false;
-      }
-    }
-
     // Search filter
     if (searchQuery) {
       const searchLower = searchQuery.toLowerCase();
@@ -469,15 +334,15 @@ const ArtistBookings = () => {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-xl border-border/40">
+      <header className="sticky top-0 z-10 border-b backdrop-blur-xl bg-background/80 border-border/40">
         <div className="p-4">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-semibold">Bookings</h1>
             <button
-              onClick={() => setFilterOpen(!filterOpen)}
-              className="p-2 transition-colors rounded-lg hover:bg-accent"
+              onClick={() => navigate("/artist/bookings/history")}
+              className="p-2 rounded-lg transition-colors hover:bg-accent"
             >
-              <Filter className="w-5 h-5" />
+              <History className="w-5 h-5" />
             </button>
           </div>
 
@@ -488,13 +353,13 @@ const ArtistBookings = () => {
               placeholder="Search by customer or service..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 pl-10 transition-colors border rounded-lg border-border/40 focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="px-4 py-2 pl-10 w-full rounded-lg border transition-colors border-border/40 focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
-            <User className="absolute w-5 h-5 transform -translate-y-1/2 left-3 top-1/2 text-muted-foreground" />
+            <User className="absolute left-3 top-1/2 w-5 h-5 transform -translate-y-1/2 text-muted-foreground" />
           </div>
 
           {/* Date Filter */}
-          <div className="grid grid-cols-4 gap-2 mb-4">
+          <div className="grid grid-cols-4 gap-2">
             {[
               { value: "all", label: "All" },
               { value: "today", label: "Today" },
@@ -514,30 +379,6 @@ const ArtistBookings = () => {
               </button>
             ))}
           </div>
-
-          {/* Tabs */}
-          <div className="grid grid-cols-2 p-1 border rounded-xl border-border/40">
-            <button
-              onClick={() => setActiveTab("upcoming")}
-              className={`py-2.5 text-sm font-medium rounded-lg transition-colors ${
-                activeTab === "upcoming"
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Upcoming
-            </button>
-            <button
-              onClick={() => setActiveTab("history")}
-              className={`py-2.5 text-sm font-medium rounded-lg transition-colors ${
-                activeTab === "history"
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              History
-            </button>
-          </div>
         </div>
       </header>
 
@@ -553,18 +394,15 @@ const ArtistBookings = () => {
                 onAccept={handleAccept}
                 onDecline={handleDecline}
                 onComplete={handleComplete}
-                onMessage={handleMessage}
               />
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center p-8 text-center border rounded-xl border-border/40">
+            <div className="flex flex-col justify-center items-center p-8 text-center rounded-xl border border-border/40">
               <p className="mb-2 text-lg font-medium">No Bookings</p>
               <p className="text-sm text-muted-foreground">
                 {searchQuery
                   ? "No bookings match your search"
-                  : activeTab === "upcoming"
-                  ? "You don't have any upcoming appointments"
-                  : "Your past appointments will appear here"}
+                  : "You don't have any bookings yet"}
               </p>
             </div>
           )}

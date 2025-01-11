@@ -21,6 +21,8 @@ import ProfilePage from "./pages/Profile";
 import EditProfilePage from "./pages/Profile/EditProfile";
 import ArtistDashboard from "./pages/ArtistDashboard";
 import ArtistBookings from "./pages/ArtistBookings";
+import ArtistBookingHistory from "./pages/ArtistBookingHistory";
+import ArtistBookingDetail from "./pages/ArtistBookingDetail";
 
 function App() {
   return (
@@ -35,6 +37,14 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/artist/dashboard" element={<ArtistDashboard />} />
           <Route path="/artist/bookings" element={<ArtistBookings />} />
+          <Route
+            path="/artist/bookings/:id"
+            element={<ArtistBookingDetail />}
+          />
+          <Route
+            path="/artist/bookings/history"
+            element={<ArtistBookingHistory />}
+          />
           <Route path="/artist/:id" element={<ArtistDetailPage />} />
           <Route path="/artist/:id/services" element={<ArtistServices />} />
           <Route path="/artist/:id/portfolio" element={<ArtistPortfolio />} />
